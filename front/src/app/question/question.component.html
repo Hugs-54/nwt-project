@@ -4,7 +4,7 @@
         <ul>
             <li *ngFor="let answer of question.answers; let i = index">
                 <label class="container">
-                    <input type="checkbox" [id]="questionId + i" name="answer" class="answer" />
+                    <input type="checkbox" [id]="questionId + i" name="answer" class="answer" (change)="onAnswerChange(i)"/>
                     <label [for]="questionId + i" [id]="questionId + i">{{answer.textAnswer}}</label>
                     <span class="checkmark"></span>
                 </label>

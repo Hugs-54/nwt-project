@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Question } from '../types/question.type';
 
@@ -9,12 +9,13 @@ import { Question } from '../types/question.type';
 })
 export class QuestionComponent {
 
-  private _questionId: string;
+  private _questionId: number;
   private _question: Question;
+  @Output() setSelected = new EventEmitter<{questionId: number, answerId: number }>();
 
   constructor(private _router: Router) {
     this._question = {} as Question;
-    this._questionId = "0";
+    this._questionId = 0;
   }
 
   @Input()
@@ -28,11 +29,15 @@ export class QuestionComponent {
 
   @Input()
   set questionId(questionId: number) {
-    this._questionId = ""+questionId;
+    this._questionId = questionId;
   }
 
   get questionId(): string {
-    return this._questionId;
+    return this._questionId+"";
+  }
+
+  onAnswerChange(answer: number){
+    this.setSelected.emit({questionId: this._questionId, answerId: answer });
   }
 
 }
