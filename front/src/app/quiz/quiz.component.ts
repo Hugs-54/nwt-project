@@ -6,13 +6,38 @@ import { Component } from '@angular/core';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent {
-
-  questions = [
-    'Capitale de la france',
-    'Face dun dé',
-    'Nombre de semaine',
-    // Ajoutez autant de questions que vous le souhaitez
-  ];
+  quiz = [ 
+    {
+      textQuestion: "Quelle est la capitale de la france ?",
+      answers : [
+        {
+          textAnswer : "Paris",
+           isCorrect : true
+        },
+        {
+          textAnswer : "Madrid",
+           isCorrect : false
+        },
+        {
+          textAnswer : "Berlin",
+           isCorrect : false
+        }
+      ]
+    },
+    {
+      textQuestion: "Quelle est la valeur de PI ?",
+      answers : [
+        {
+          textAnswer : "3.74",
+            isCorrect : false
+        },
+        {
+          textAnswer : "3.14",
+            isCorrect : true
+        }
+      ]
+    }
+  ]
 }
 
 
