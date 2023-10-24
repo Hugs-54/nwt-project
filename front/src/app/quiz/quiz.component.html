@@ -1,0 +1,5 @@
+<div class="quiz-container" id="quiz">
+    <h1>Nom du quiz</h1>
+    <app-question class="question" *ngFor="let question of questions; let i = index" [question]="question" [questionId]="i"></app-question>
+    <button id="submit">Submit</button>
+</div>

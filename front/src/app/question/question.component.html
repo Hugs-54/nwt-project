@@ -1,0 +1,36 @@
+<div class="question-container">
+    <div class="question-header">
+        <h2 id="question">{{ question }}</h2>
+        <ul>
+            <li>
+                <label class="container">
+                    <input type="checkbox" [id]="'a' + questionId" name="answer" class="answer" />
+                    <label [for]="'a' + questionId" [id]="'a_text' + questionId">Reponse</label>
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+            <li>
+                <label class="container">
+                    <input type="checkbox" [id]="'b' + questionId" name="answer" class="answer" />
+                    <label [for]="'b' + questionId" [id]="'b_text' + questionId">Reponse</label>
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+            <li>
+                <label class="container">
+                    <input type="checkbox" [id]="'c' + questionId" name="answer" class="answer" />
+                    <label [for]="'c' + questionId" [id]="'c_text' + questionId">Reponse</label>
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+            <li>
+                <label class="container">
+                    <input type="checkbox" [id]="'d' + questionId" name="answer" class="answer" />
+                    <label [for]="'d' + questionId" [id]="'d_text' + questionId">Reponse</label>
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
