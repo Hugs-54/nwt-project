@@ -1,0 +1,28 @@
+// Créez la collection "users" avec les champs "username" et "email"
+db.createCollection("users")
+db.users.createIndex({ "username": 1 }, { unique: true })  // Crée un index unique sur le champ "username"
+db.users.createIndex({ "email": 1 }, { unique: true })      // Crée un index unique sur le champ "email"
+
+// Créez la collection "quizzes" avec les champs "title", "isPublic" et "ownerID"
+db.createCollection("quizzes")
+db.quizzes.createIndex({ "ownerID": 1 })  // Crée un index sur le champ "ownerID"
+
+// Créez la collection "questions" avec les champs "text" et "quizID"
+db.createCollection("questions")
+db.questions.createIndex({ "quizID": 1 })  // Crée un index sur le champ "quizID"
+
+// Créez la collection "answers" avec les champs "text", "isCorrect" et "questionID"
+db.createCollection("answers")
+db.answers.createIndex({ "questionID": 1 })  // Crée un index sur le champ "questionID"
+
+// Créez la collection "quizUsers" avec les champs "userID" et "quizID"
+db.createCollection("quizUsers")
+db.quizUsers.createIndex({ "userID": 1 })  // Crée un index sur le champ "userID"
+db.quizUsers.createIndex({ "quizID": 1 })  // Crée un index sur le champ "quizID"
+
+// Créez la collection "userResponses" avec les champs "userID", "quizID", "questionID" et "answerID"
+db.createCollection("userResponses")
+db.userResponses.createIndex({ "userID": 1 })        // Crée un index sur le champ "userID"
+db.userResponses.createIndex({ "quizID": 1 })        // Crée un index sur le champ "quizID"
+db.userResponses.createIndex({ "questionID": 1 })    // Crée un index sur le champ "questionID"
+db.userResponses.createIndex({ "answerID": 1 })      // Crée un index sur le champ "answerID"
