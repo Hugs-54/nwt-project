@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { QuizModule } from './quiz/quiz.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://0.0.0.0:27017/nwt'), QuizModule],
+  imports: [QuizModule, MongooseModule.forRoot('mongodb://0.0.0.0:27017/nwt')],
 })
 export class AppModule {}
