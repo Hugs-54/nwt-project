@@ -5,21 +5,30 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  // create NestJS application
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
   );
 
-  // use global pipe validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
     }),
   );
+
+  const options = new DocumentBuilder()
+    .setTitle('Quiz API')
+    .setDescription("La description de l'API de Quiz")
+    .setVersion('1.0')
+    .addTag('quiz')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
 
   // launch server
   await app.listen('3000', 'localhost');

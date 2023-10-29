@@ -1,32 +1,42 @@
 import { Document, Schema } from 'mongoose';
-import * as mongoose from 'mongoose';
 
 export interface Answer extends Document {
-    textAnswer: string;
-    isCorrect: boolean;
+  textAnswer: string;
+  isCorrect: boolean;
 }
 
 export const AnswerSchema = new Schema({
-    textAnswer: { type: String, required: true },
-    isCorrect: { type: Boolean, required: true },
+  textAnswer: { type: String, required: true, minlength: 1, maxlength: 300 },
+  isCorrect: { type: Boolean, required: true },
 });
 
 export interface Question extends Document {
-    textQuestion: string;
-    answers: Answer[];
+  textQuestion: string;
+  answers: Answer[];
 }
 
 export const QuestionSchema = new Schema({
-    textQuestion: { type: String, required: true },
-    answers: [AnswerSchema],
+  textQuestion: { type: String, required: true, minlength: 1, maxlength: 500 },
+  answers: [AnswerSchema],
 });
 
 export interface Quiz extends Document {
-    title: string;
-    questions: Question[];
+  title: string;
+  questions: Question[];
 }
 
-export const QuizSchema = new Schema({
-    title: { type: String, required: true },
+export const QuizSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      minlength: 1,
+      maxlength: 200,
+      index: true,
+    },
     questions: [QuestionSchema],
-});
+  },
+  {
+    timestamps: true,
+  },
+);
