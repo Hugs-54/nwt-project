@@ -1,0 +1,12 @@
+<div *ngFor="let question of quiz.questions; let i = index">
+    <div class="question-container question-header">
+        <input type="text" [id]="i" placeholder="Ecrivez votre question" name="questionText" (input)="updateQuestion($event, i)"/>
+        <div *ngFor="let answer of answers(i); let j = index">
+            <input type="text" [id]="j" value="{{answer.textAnswer}}" name="answerText" (input)="updateAnswer($event, i, j)"/>
+            <input type="checkbox" />
+        </div>
+        <button class="add-answer-button" (click)="addAnswerToQuestion(i)">+</button>
+    </div>
+</div>
+
+<button class="add-question-button" (click)="addQuestion()">Ajouter une question</button>

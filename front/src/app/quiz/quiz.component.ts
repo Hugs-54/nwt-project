@@ -143,7 +143,7 @@ export class QuizComponent {
         score += selectedAnswers.length;
       }*/
     });
-    console.log(`Score: ${score.toFixed(2)}/${this._quiz.questions.length}`);
+    alert(`Score: ${score.toFixed(2)}/${this._quiz.questions.length}`);
     
   }
 }
