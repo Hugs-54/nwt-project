@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Answer, Question, Quiz } from '../types/question.type';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-create-quiz',
@@ -11,7 +12,7 @@ export class CreateQuizComponent {
 
   private _quiz: Quiz;
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private _httpClient: HttpClient) {
     this._quiz = {} as Quiz;
     this.generateDefaultQuiz();
     this.printQuiz();
@@ -76,5 +77,88 @@ export class CreateQuizComponent {
   updateAnswer(event: any, indexQ: number, indexA: number){
     this.quiz.questions[indexQ].answers[indexA] = event.target.value;
     this.printQuiz();
+  }
+
+  generateQuiz(){
+    let quizData = {
+      title : "Culture G",
+      questions : [ 
+        {
+          textQuestion: "Quelle est la capitale de la france ?",
+          answers : [
+            {
+              textAnswer : "Paris",
+               isCorrect : true
+            },
+            {
+              textAnswer : "Madrid",
+               isCorrect : false
+            },
+            {
+              textAnswer : "Berlin",
+               isCorrect : false
+            }
+          ]
+        },
+        {
+          textQuestion: "Quelle est la valeur de PI ?",
+          answers : [
+            {
+              textAnswer : "3.74",
+                isCorrect : false
+            },
+            {
+              textAnswer : "3.14",
+                isCorrect : true
+            }
+          ]
+        },
+        {
+          textQuestion: "Parmis ces planètes, lesquelles sont gazzeuses ?",
+          answers : [
+            {
+              textAnswer : "Mercure",
+                isCorrect : false
+            },
+            {
+              textAnswer : "Jupiter",
+                isCorrect : true
+            },
+            {
+              textAnswer : "Saturne",
+                isCorrect : true
+            },
+            {
+              textAnswer : "Mars",
+                isCorrect : false
+            }
+          ]
+        },
+        {
+          textQuestion: "Quels sont les chiffres plus grands que 5",
+          answers : [
+            {
+              textAnswer : "3",
+                isCorrect : false
+            },
+            {
+              textAnswer : "8",
+                isCorrect : true
+            },
+            {
+              textAnswer : "7",
+                isCorrect : true
+            },
+            {
+              textAnswer : "12",
+                isCorrect : true
+            }
+          ]
+        }
+      ]
+    } as Quiz;
+    this._httpClient.post("http://localhost:3000/quiz",quizData).subscribe(response => {
+      console.log('Réponse du serveur :', response);
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Question, Quiz } from '../types/question.type';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-quiz',
@@ -8,87 +9,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent {
-  private _quiz = {
-    title : "Culture G",
-    questions : [ 
-      {
-        textQuestion: "Quelle est la capitale de la france ?",
-        answers : [
-          {
-            textAnswer : "Paris",
-             isCorrect : true
-          },
-          {
-            textAnswer : "Madrid",
-             isCorrect : false
-          },
-          {
-            textAnswer : "Berlin",
-             isCorrect : false
-          }
-        ]
-      },
-      {
-        textQuestion: "Quelle est la valeur de PI ?",
-        answers : [
-          {
-            textAnswer : "3.74",
-              isCorrect : false
-          },
-          {
-            textAnswer : "3.14",
-              isCorrect : true
-          }
-        ]
-      },
-      {
-        textQuestion: "Parmis ces planètes, lesquelles sont gazzeuses ?",
-        answers : [
-          {
-            textAnswer : "Mercure",
-              isCorrect : false
-          },
-          {
-            textAnswer : "Jupiter",
-              isCorrect : true
-          },
-          {
-            textAnswer : "Saturne",
-              isCorrect : true
-          },
-          {
-            textAnswer : "Mars",
-              isCorrect : false
-          }
-        ]
-      },
-      {
-        textQuestion: "Quels sont les chiffres plus grands que 5",
-        answers : [
-          {
-            textAnswer : "3",
-              isCorrect : false
-          },
-          {
-            textAnswer : "8",
-              isCorrect : true
-          },
-          {
-            textAnswer : "7",
-              isCorrect : true
-          },
-          {
-            textAnswer : "12",
-              isCorrect : true
-          }
-        ]
-      }
-    ]
-  } as Quiz;
+  private _quiz : Quiz;
 
-  constructor(private _router: Router) {
-    //this._quiz = {} as Quiz;
-    this.addIsSelectedToAnswers();
+  constructor(private _router: Router, private _httpClient: HttpClient) {
+    this._quiz = {} as Quiz;
+  }
+
+  ngOnInit() {
+    let id = "653fe823630cd7609fc7d4a2";
+    this.fetchQuiz(id);
+  }
+
+  fetchQuiz(quizId: string) {
+    const apiUrl = `http://localhost:3000/quiz/${quizId}`;
+
+    this._httpClient.get<Quiz>(apiUrl).subscribe(
+      (response) => {
+        this._quiz = response;
+        this.addIsSelectedToAnswers();
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération du quiz :', error);
+      }
+    );
   }
   
   get quiz(): Question[] {
