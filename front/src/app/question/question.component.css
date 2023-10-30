@@ -12,15 +12,7 @@ body {
     padding-top: 30px;
 }
 
-.question-container {
-    color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.1);
-    overflow: hidden;
-    width: 600px;
-    max-width: 100%;
-    background: #5c6b73; 
-}
+
 
 .question-header {
     padding: 4rem;
@@ -105,3 +97,33 @@ ul li label {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+  .question-container {
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.1);
+    overflow: hidden;
+    width: 600px;
+    max-width: 100%;
+    background: #5c6b73; 
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+.width-group{
+  width: 100%;
+  min-width: 700px;
+}
+
+.box{
+  border-radius: 10px;
+  box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.2);
+}

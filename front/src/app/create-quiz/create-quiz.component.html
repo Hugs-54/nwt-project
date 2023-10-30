@@ -1,4 +1,4 @@
-<div *ngFor="let question of quiz.questions; let i = index">
+<!--<div *ngFor="let question of quiz.questions; let i = index">
     <div class="question-container question-header">
         <input type="text" [id]="i" placeholder="Ecrivez votre question" name="questionText" (input)="updateQuestion($event, i)"/>
         <div *ngFor="let answer of answers(i); let j = index">
@@ -7,7 +7,27 @@
         </div>
         <button class="add-answer-button" (click)="addAnswerToQuestion(i)">+</button>
     </div>
+</div>-->
+
+
+<div class="container">
+	<div class="list-group width-group box" *ngFor="let question of quiz.questions; let i = index">
+		<div class="list-group-item width-group mx-auto">
+			<h3 class="text-center mb-4">
+				<input type="text" [id]="i" class="form-control fs-2" aria-label="Question" placeholder="Ecrivez votre question" name="questionText" (input)="updateQuestion($event, i)"/>
+			</h3>
+			<div class="gap-2">
+				<div class="d-grid col-6 mx-auto" *ngFor="let answer of answers(i); let j = index">
+                    <div class="input-group mb-3">
+                        <input type="text" [id]="j" class="form-control fs-3" placeholder="Ecrivez votre réponse" aria-label="Answer" (input)="updateAnswer($event, i, j)">
+                    </div>
+				</div>
+                <button type="button" class="btn btn-outline-info d-grid mx-auto fs-3" (click)="addAnswerToQuestion(i)">+</button>
+			</div>
+		</div>
+	</div>
 </div>
+
 
 <button class="add-question-button" (click)="addQuestion()">Ajouter une question</button>
 <button (click)="generateQuiz()">Créer le quiz</button>

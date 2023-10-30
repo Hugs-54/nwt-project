@@ -33,7 +33,7 @@ export class CreateQuizComponent {
   addQuestion(){
     this._quiz.questions.push(
       {
-        textQuestion: "Ecrivez votre question",
+        textQuestion: "",
         answers: []
       }
     );
@@ -46,7 +46,7 @@ export class CreateQuizComponent {
   addAnswerToQuestion(questionId: number){
     this._quiz.questions.at(questionId)?.answers.push(
       {
-        textAnswer: "Ecrivez votre réponse",
+        textAnswer: "",
         isCorrect: false
       }
     );
@@ -75,7 +75,7 @@ export class CreateQuizComponent {
   }
 
   updateAnswer(event: any, indexQ: number, indexA: number){
-    this.quiz.questions[indexQ].answers[indexA] = event.target.value;
+    this.quiz.questions[indexQ].answers[indexA].textAnswer = event.target.value;
     this.printQuiz();
   }
 

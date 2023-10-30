@@ -87,6 +87,7 @@ export class QuizComponent {
       }*/
     });
     alert(`Score: ${score.toFixed(2)}/${this._quiz.questions.length}`);
+    //console.log(this._quiz);
     
   }
 }
