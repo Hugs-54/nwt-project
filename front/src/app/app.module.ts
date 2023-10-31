@@ -7,13 +7,17 @@ import { QuizComponent } from './quiz/quiz.component';
 import { QuestionComponent } from './question/question.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MyQuizzesComponent } from './my-quizzes/my-quizzes.component';
+import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuizComponent,
     QuestionComponent,
-    CreateQuizComponent
+    CreateQuizComponent,
+    MyQuizzesComponent,
+    SharedQuizzesComponent
   ],
   imports: [
     BrowserModule,

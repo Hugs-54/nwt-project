@@ -69,6 +69,11 @@ export class CreateQuizComponent {
     return this._quiz.questions[index].answers;
   }
 
+  updateTitle(event: any){
+    this.quiz.title = event.target.value;
+    this.printQuiz();
+  }
+
   updateQuestion(event: any, index: number){
     this.quiz.questions[index].textQuestion = event.target.value;
     this.printQuiz();
@@ -79,85 +84,22 @@ export class CreateQuizComponent {
     this.printQuiz();
   }
 
+  updateAnswerIsCorrect(event: any, indexQ: number, indexA: number){
+    let b = this.quiz.questions[indexQ].answers[indexA].isCorrect;
+    this.quiz.questions[indexQ].answers[indexA].isCorrect = !b;
+    this.printQuiz();
+  }
+
+  deleteAnswer(indexQ: number, indexA: number){
+    this.quiz.questions[indexQ].answers.splice(indexA, 1);
+  }
+
+  deleteQuestion(indexQ: number){
+    this.quiz.questions.splice(indexQ, 1);
+  }
+
   generateQuiz(){
-    let quizData = {
-      title : "Culture G",
-      questions : [ 
-        {
-          textQuestion: "Quelle est la capitale de la france ?",
-          answers : [
-            {
-              textAnswer : "Paris",
-               isCorrect : true
-            },
-            {
-              textAnswer : "Madrid",
-               isCorrect : false
-            },
-            {
-              textAnswer : "Berlin",
-               isCorrect : false
-            }
-          ]
-        },
-        {
-          textQuestion: "Quelle est la valeur de PI ?",
-          answers : [
-            {
-              textAnswer : "3.74",
-                isCorrect : false
-            },
-            {
-              textAnswer : "3.14",
-                isCorrect : true
-            }
-          ]
-        },
-        {
-          textQuestion: "Parmis ces planètes, lesquelles sont gazzeuses ?",
-          answers : [
-            {
-              textAnswer : "Mercure",
-                isCorrect : false
-            },
-            {
-              textAnswer : "Jupiter",
-                isCorrect : true
-            },
-            {
-              textAnswer : "Saturne",
-                isCorrect : true
-            },
-            {
-              textAnswer : "Mars",
-                isCorrect : false
-            }
-          ]
-        },
-        {
-          textQuestion: "Quels sont les chiffres plus grands que 5",
-          answers : [
-            {
-              textAnswer : "3",
-                isCorrect : false
-            },
-            {
-              textAnswer : "8",
-                isCorrect : true
-            },
-            {
-              textAnswer : "7",
-                isCorrect : true
-            },
-            {
-              textAnswer : "12",
-                isCorrect : true
-            }
-          ]
-        }
-      ]
-    } as Quiz;
-    this._httpClient.post("http://localhost:3000/quiz",quizData).subscribe(response => {
+    this._httpClient.post("http://localhost:3000/quiz",this._quiz).subscribe(response => {
       console.log('Réponse du serveur :', response);
     });
   }

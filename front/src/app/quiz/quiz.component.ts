@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Question, Quiz } from '../types/question.type';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -10,18 +10,20 @@ import { HttpClient } from '@angular/common/http';
 })
 export class QuizComponent {
   private _quiz : Quiz;
+  private _quizId: string;
 
-  constructor(private _router: Router, private _httpClient: HttpClient) {
+  constructor(private _route: ActivatedRoute, private _httpClient: HttpClient) {
     this._quiz = {} as Quiz;
+    this._quizId = "";
   }
 
   ngOnInit() {
-    let id = "653fe823630cd7609fc7d4a2";
-    this.fetchQuiz(id);
+    this.fetchQuiz();
   }
 
-  fetchQuiz(quizId: string) {
-    const apiUrl = `http://localhost:3000/quiz/${quizId}`;
+  fetchQuiz() {
+    this._route.params.subscribe(params => {this._quizId = params['id'];});
+    const apiUrl = `http://localhost:3000/quiz/${this._quizId}`;
 
     this._httpClient.get<Quiz>(apiUrl).subscribe(
       (response) => {

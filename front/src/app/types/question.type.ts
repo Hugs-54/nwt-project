@@ -1,6 +1,7 @@
 export type Quiz = {
     title: string;
     questions: Question[];
+    _id?:string;
 };
 
 export type Question = {

@@ -1,1 +1,22 @@
+<div class="container-fluid mb-3 sticky-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a [routerLink]="['/home']" class="nav-link" [routerLinkActive]="['active']">Se connecter</a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="['/my-quizzes']" class="nav-link" [routerLinkActive]="['active']">Mes Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a [routerLink]="['/shared-quizzes']" class="nav-link" [routerLinkActive]="['active']">Participer aux Quiz</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
 <router-outlet></router-outlet>

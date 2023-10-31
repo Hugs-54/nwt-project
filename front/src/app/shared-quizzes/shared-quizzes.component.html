@@ -1,0 +1,8 @@
+<div class="list-group-item width-group mx-auto d-flex mx-auto justify-content-center align-items-center" *ngFor="let quiz of quizzes; let i = index">
+    <div class="gap-2">
+        <div class="input-group mb-3 mr-3 ">
+            <span class="input-group-text fs-4" id="quiz.title">{{quiz.title}}</span>
+            <button type="button" class="btn btn-outline-primary fs-4" [id]="quiz._id" [routerLink]="['/quiz', quiz._id]">Participer</button>
+        </div>
+    </div>
+</div>
