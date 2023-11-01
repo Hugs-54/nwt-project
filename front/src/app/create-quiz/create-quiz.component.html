@@ -1,28 +1,54 @@
 <div class="container">
-    <input type="text" class="form-control fs-1 mb-3 text-center" aria-label="Title" placeholder="Titre du Quiz" (input)="updateTitle($event)"/>
-	<div class="list-group width-group box mb-3" *ngFor="let question of quiz.questions; let i = index">
-		<div class="list-group-item width-group mx-auto">
-			<h3 class="text-center mb-4">
-                <div class="input-group mb-3 mr-3">
-                    <input type="text" [id]="i" class="form-control fs-2" aria-label="Question" placeholder="Ecrivez votre question" name="questionText" (input)="updateQuestion($event, i)"/>
-                    <button *ngIf="quiz.questions.length > 1" type="button" class="btn btn-outline-danger" (click)="deleteQuestion(i)"><strong>-</strong></button>
-                </div>
-			</h3>
-			<div class="gap-2">
-				<div class="d-grid col-6 mx-auto" *ngFor="let answer of answers(i); let j = index">
-                    <div class="input-group mb-3 mr-3">
-                        <button *ngIf="answers(i).length > 2" type="button" class="btn btn-outline-danger" (click)="deleteAnswer(i, j)"><strong>-</strong></button>
-                        <input type="text" [id]="i + '_' + j + 0" class="form-control fs-3" placeholder="Ecrivez votre réponse" aria-label="Answer" (input)="updateAnswer($event, i, j)">
-                        <input type="checkbox" class="btn-check" [id]="i + '_' + j + 1" autocomplete="off" (click)="updateAnswerIsCorrect($event, i, j)">
-                        <label class="btn btn-outline-success d-flex justify-content-center align-items-center" [for]="i + '_' + j + 1" [id]="i + '_' + j + 1">    
-                            <strong>✓</strong>
-                        </label>
+    <form novalidate [formGroup]="form">
+        <div class="mb-3">
+            <input type="text" formControlName="title" minlength="2" required name="title" class="form-control fs-1 text-center" placeholder="Titre du Quiz" />
+            <div *ngIf="form.get('title')?.hasError('required')" class="form-text ps-2" id="basic-addon4">
+                Le titre est requis.
+            </div>
+            <div *ngIf="form.get('title')?.hasError('minlength')" class="form-text ps-2" id="basic-addon4">
+                Le titre doit faire au minimum 2 caractrères.
+            </div>
+        </div>
+        
+        <div formArrayName="questions">
+            <div class="list-group width-group box mb-3" *ngFor="let question of questions(); let i = index">
+                <div class="list-group-item width-group mx-auto" [formGroupName]="i">
+                    <div class="mb-4">
+                        <h3 class="text-center input-group mr-3">
+                            <input type="text" [id]="i" formControlName="textQuestion" minlength="5" class="form-control fs-2" placeholder="Ecrivez votre question" required/>
+                            <button *ngIf="questions().length > 1" type="button" class="btn btn-outline-danger" (click)="deleteQuestion(i)"><strong>-</strong></button>
+                        </h3>
+                        <div *ngIf="form.get('questions.' + i + '.textQuestion')?.hasError('required')" class="form-text ps-2" id="basic-addon4">
+                            Ce champ ne peut pas être vide.
+                        </div>
+                        <div *ngIf="form.get('questions.' + i + '.textQuestion')?.hasError('minlength')" class="form-text ps-2" id="basic-addon4">
+                            La question doit faire au minimum 5 caractrères.
+                        </div>
                     </div>
-				</div>
-                <button *ngIf="answers(i).length < 4" type="button" class="btn btn-outline-info d-grid mx-auto" (click)="addAnswerToQuestion(i)"><strong>+</strong></button>
-			</div>
-		</div>
-	</div>
-    <button type="button" class="btn btn-outline-info mb-4 d-flex mx-auto justify-content-center align-items-center big-button" (click)="addQuestion()"><strong>+</strong></button>
-    <button type="button" class="btn btn-primary d-flex mx-auto fs-2" (click)="generateQuiz()">Créer le quiz</button>
+                    
+                    <div class="gap-2" formArrayName="answers" >
+                        <div class="d-grid col-6 mx-auto mb-3" *ngFor="let answer of answers(i); let j = index">
+                            <div class="input-group  mr-3" [formGroupName]="j"> 
+                                <button *ngIf="answers(i).length > 2" type="button" class="btn btn-outline-danger" (click)="deleteAnswer(i,j)"><strong>-</strong></button>
+                                <input type="text" [id]="i + '_' + j + 0" class="form-control fs-3" minlength="1" formControlName="textAnswer" placeholder="Ecrivez votre réponse" required >
+                                <input type="checkbox" class="btn-check" [id]="i + '_' + j + 1" autocomplete="off" formControlName="isCorrect" (click)="updateAnswerIsCorrect(i,j)">
+                                <label class="btn btn-outline-success d-flex justify-content-center align-items-center" [for]="i + '_' + j + 1" [id]="i + '_' + j + 1">    
+                                    <strong>✓</strong>
+                                </label>
+                            </div>
+                            <div *ngIf="form.get('questions.' + i + '.answers.'+ j + '.textAnswer')?.hasError('required')" class="form-text ps-2" id="basic-addon4">
+                                Ce champ ne peut pas être vide.
+                            </div>
+                        </div>
+                        <button *ngIf="answers(i).length < 4" type="button" class="btn btn-outline-info d-grid mx-auto" (click)="addAnswerToQuestion(i)"><strong>+</strong></button>
+                        <div *ngIf="!answerHasCorrectAnswer(i)" class="form-text ps-2" id="basic-addon4">
+                            Au moins une réponse doit être définie comme correcte.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-info mb-4 d-flex mx-auto justify-content-center align-items-center big-button" (click)="addQuestion()"><strong>+</strong></button>
+        <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" (click)="submit(form.value)" [disabled]="form.invalid">Créer le quiz</button>
+    </form>
 </div>

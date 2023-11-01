@@ -9,6 +9,7 @@ import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MyQuizzesComponent } from './my-quizzes/my-quizzes.component';
 import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.componen
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
