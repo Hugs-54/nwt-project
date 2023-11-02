@@ -93,20 +93,14 @@ export class CreateQuizComponent implements OnInit, OnChanges {
    * Refresh la validation. Nécessaire car l'ajout de FormGroup/Array ne déclenche pas forcément la validation
    */
   checkValidation(){
-    setTimeout(()=>{
-      for (let i = 0; i < this.questions().length; i++) {
-        const answersArray = this._form.get('questions.' + i + '.answers') as FormArray;
-        for (let j = 0; j < answersArray.length; j++) {
-          answersArray.at(j).updateValueAndValidity();
-        }
-      }
-      (this._form.get('questions') as FormArray).updateValueAndValidity();
-    })
+    for (let i = 0; i < this.questions().length; i++) {
+      (this._form.get('questions.' + i + '.answers') as FormArray).updateValueAndValidity();
+    }
+    (this._form.get('questions') as FormArray).updateValueAndValidity();
   }
 
   /**
-   * Ajoute une nouvelle question au formulaire
-   * Le validateur qui vérifie qu'il y ai au moins une checkbox de cochée ne marche pas
+   * FormGroup d'une nouvelle question
    */
   newQuestion(): FormGroup{
     return new FormGroup({
@@ -116,10 +110,13 @@ export class CreateQuizComponent implements OnInit, OnChanges {
       answers: new FormArray([
         this.newAnswer(),
         this.newAnswer()
-      ],CustomValidators.arrayContainsAtLeast(2))
+      ],[CustomValidators.arrayContainsAtLeast(2), CustomValidators.atLeastOneCheckboxChecked()])
     })
   }
 
+  /**
+   * FormGroup d'une nouvelle réponse
+   */
   newAnswer(): FormGroup{
     return new FormGroup({
       textAnswer: new FormControl('', Validators.compose([
@@ -129,10 +126,10 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     })
   }
 
-   /**
-   * Function to build our form
+  /**
+   * FormGroup d'un quiz de base
    */
-   private _buildForm(): FormGroup {
+  private _buildForm(): FormGroup {
     return new FormGroup({
       title: new FormControl('', Validators.compose([
         Validators.required, Validators.minLength(2)
