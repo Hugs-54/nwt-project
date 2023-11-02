@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     QuestionComponent,
     CreateQuizComponent,
     MyQuizzesComponent,
-    SharedQuizzesComponent
+    SharedQuizzesComponent,
   ],
   imports: [
     BrowserModule,
