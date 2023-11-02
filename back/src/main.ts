@@ -32,6 +32,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.use(cors());
+
   // launch server
   await app.listen('3000', 'localhost');
   Logger.log(`Application served at http://localhost:3000`, 'bootstrap');
