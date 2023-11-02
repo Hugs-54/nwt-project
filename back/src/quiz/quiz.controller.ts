@@ -6,6 +6,8 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { Quiz } from './schemas/quiz.schema';
@@ -22,6 +24,9 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { CreateQuizDto } from './dto/quiz.dto';
+import { QuizSubmissionDto } from './dto/quiz-sub.dto';
+import { JwtStrategy } from '../auth/strategy/jwt.strategy';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @ApiTags('quiz')
 @Controller('quiz')
@@ -78,5 +83,20 @@ export class QuizController {
   @ApiParam({ name: 'id', description: 'ID du quiz à supprimer.' })
   async delete(@Param('id') id: string): Promise<Quiz> {
     return this.quizService.delete(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('submit-quiz')
+  async submitQuiz(
+    @Request() req,
+    @Body() quizSubmissionDto: QuizSubmissionDto,
+  ): Promise<any> {
+    const userId = req.user.userId; // Récupération de l'ID utilisateur à partir du token
+    const result = await this.quizService.evaluateSubmission(
+      userId,
+      quizSubmissionDto,
+    );
+    await this.quizService.saveSubmission(userId, quizSubmissionDto);
+    return result;
   }
 }

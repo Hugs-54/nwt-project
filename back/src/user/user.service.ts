@@ -2,13 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private userModel: Model<User>) {}
 
   async create(user: Partial<User>): Promise<User> {
-    const createdUser = new this.userModel(user);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const createdUser = new this.userModel({
+      ...user,
+      password: hashedPassword,
+    });
     return await createdUser.save();
   }
 
@@ -51,5 +56,12 @@ export class UserService {
       throw new NotFoundException(`User with ID "${userId}" not found`);
     }
     return deletedUser;
+  }
+
+  async comparePasswords(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(plainPassword, hashedPassword);
   }
 }

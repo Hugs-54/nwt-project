@@ -8,12 +8,19 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 export class AuthService {
   constructor(private readonly usersService: UserService) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findOneByUsername(username);
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
+    console.log('User from DB:', user);
+
+    // Ici, je suppose que vous avez une logique de vérification du mot de passe.
+    const isPasswordMatching = await this.usersService.comparePasswords(
+      password,
+      user.password,
+    );
+    console.log('Is password matching:', isPasswordMatching);
+
+    if (user && isPasswordMatching) {
+      return user;
     }
     return null;
   }

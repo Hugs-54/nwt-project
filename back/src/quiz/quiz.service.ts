@@ -3,10 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Quiz } from './schemas/quiz.schema';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { QuizSubmission } from './schemas/quiz-sub.schema';
+import { QuizSubmissionDto } from './dto/quiz-sub.dto';
 
 @Injectable()
 export class QuizService {
-  constructor(@InjectModel('Quiz') private readonly quizModel: Model<Quiz>) {}
+  constructor(
+    @InjectModel('Quiz') private readonly quizModel: Model<Quiz>,
+    @InjectModel('QuizSubmission')
+    private readonly quizSubmissionModel: Model<QuizSubmission>,
+  ) {}
 
   async create(data: Partial<Quiz>): Promise<Quiz> {
     const createdQuiz = new this.quizModel(data);
@@ -50,5 +56,73 @@ export class QuizService {
       }
       throw error;
     }
+  }
+
+  async saveSubmission(
+    userId: string,
+    quizSubmissionDto: QuizSubmissionDto,
+  ): Promise<QuizSubmission> {
+    const submission = new this.quizSubmissionModel({
+      user: userId,
+      quiz: quizSubmissionDto.quizId,
+      answers: quizSubmissionDto.questions.map((questionSubmission) => ({
+        questionId: questionSubmission.questionId,
+        selectedAnswers: questionSubmission.selectedAnswers,
+      })),
+    });
+    return submission.save();
+  }
+
+  async evaluateSubmission(
+    userId: string,
+    quizSubmissionDto: QuizSubmissionDto,
+  ): Promise<number> {
+    // Récupérer le quiz original à partir de quizId
+    const originalQuiz = await this.findById(quizSubmissionDto.quizId);
+
+    let totalCorrect = 0;
+
+    // Parcourir chaque soumission de question par l'utilisateur
+    for (const userQuestionSubmission of quizSubmissionDto.questions) {
+      // Trouver la question originale correspondante
+      const originalQuestion = originalQuiz.questions.find(
+        (q) => q._id.toString() === userQuestionSubmission.questionId,
+      );
+
+      if (
+        this.evaluateQuestion(
+          originalQuestion,
+          userQuestionSubmission.selectedAnswers,
+        )
+      ) {
+        totalCorrect++;
+      }
+    }
+
+    return totalCorrect;
+  }
+
+  evaluateQuestion(originalQuestion, selectedAnswerIds: string[]): boolean {
+    // Obtenir toutes les bonnes réponses pour la question originale
+    const correctAnswerIds = originalQuestion.answers
+      .filter((answer) => answer.isCorrect)
+      .map((answer) => answer._id.toString()); // convertir en chaîne pour la comparaison
+
+    // Vérifier que l'utilisateur a sélectionné toutes les bonnes réponses (et seulement les bonnes réponses)
+    return this.arraysEqual(correctAnswerIds, selectedAnswerIds);
+  }
+
+  arraysEqual(a: any[], b: any[]): boolean {
+    if (a.length !== b.length) return false;
+
+    // Tri et comparaison
+    const sortedA = [...a].sort();
+    const sortedB = [...b].sort();
+
+    for (let i = 0; i < sortedA.length; i++) {
+      if (sortedA[i] !== sortedB[i]) return false;
+    }
+
+    return true;
   }
 }

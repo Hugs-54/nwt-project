@@ -1,11 +1,19 @@
-import { Module } from '@nestjs/common';
+import { QuizSubmissionSchema } from './schemas/quiz-sub.schema';
+import { QuizSchema } from './schemas/quiz.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { QuizService } from './quiz.service';
 import { QuizController } from './quiz.controller';
-import { QuizSchema } from './schemas/quiz.schema';
+import { Module } from '@nestjs/common';
+import { AuthModule } from '../auth/auth.module'; // Assurez-vous que le chemin d'importation est correct
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Quiz', schema: QuizSchema }])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: 'Quiz', schema: QuizSchema },
+      { name: 'QuizSubmission', schema: QuizSubmissionSchema },
+    ]),
+    AuthModule,
+  ],
   providers: [QuizService],
   controllers: [QuizController],
 })
