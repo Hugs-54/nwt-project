@@ -1,5 +1,5 @@
 <div class="container">
-    <form novalidate [formGroup]="form">
+    <form novalidate [formGroup]="form" (click)="checkValidation()">
         <div class="mb-3">
             <input type="text" formControlName="title" minlength="2" required name="title" class="form-control fs-1 text-center" placeholder="Titre du Quiz" />
             <div *ngIf="form.get('title')?.hasError('required')" class="form-text ps-2" id="basic-addon4">
@@ -49,6 +49,6 @@
             </div>
         </div>
         <button type="button" class="btn btn-outline-info mb-4 d-flex mx-auto justify-content-center align-items-center big-button" (click)="addQuestion()"><strong>+</strong></button>
-        <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" (click)="submit(form.value)" [disabled]="form.invalid">Créer le quiz</button>
+        <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" (click)="submit(form.value)">Créer le quiz</button>
     </form>
 </div>

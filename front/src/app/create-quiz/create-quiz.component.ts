@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Answer, Question, Quiz } from '../types/question.type';
 import { Router } from '@angular/router';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'
 import { CustomValidators } from './custom-validators';
 
@@ -14,14 +14,11 @@ export class CreateQuizComponent implements OnInit, OnChanges {
 
   private _isUpdateMode: boolean;
   private _quiz: Quiz;
-  // private property to store cancel$ value
   private readonly _cancel$: EventEmitter<void>;
-  // private property to store submit$ value
   private readonly _submit$: EventEmitter<Quiz>;
-  // private property to store form value
   private readonly _form: FormGroup;
 
-  constructor(private _router: Router, private _httpClient: HttpClient) {
+  constructor(private _router: Router, private _httpClient: HttpClient, private formBuilder: FormBuilder) {
     this._quiz = {} as Quiz;
     this._isUpdateMode = false;
     this._submit$ = new EventEmitter<Quiz>();
@@ -29,9 +26,6 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     this._form = this._buildForm();
   }
 
-  /**
-   * OnInit implementation
-   */
   ngOnInit(): void {
   }
 
@@ -40,16 +34,10 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     this._quiz = quiz;
   }
 
-  /**
-   * Returns private property _quiz
-   */
   get quiz(): Quiz {
     return this._quiz;
   }
 
-  /**
-   * Returns private property _form
-   */
   get form(): FormGroup {
     return this._form;
   }
@@ -58,37 +46,38 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     return (this._form.get('questions') as FormArray).controls;
   }
 
-  answers(questionIndex: number){
-    return (this._form.get('questions.'+questionIndex+'.answers') as FormArray).controls;
+  answers(indexQ: number){
+    return (this._form.get('questions.'+indexQ+'.answers') as FormArray).controls;
   }
 
-  /**
-   * Returns private property _isUpdateMode
-   */
   get isUpdateMode(): boolean {
     return this._isUpdateMode;
   }
 
   addQuestion(){
     this.questions().push(this.newQuestion());
+    this.checkValidation();
   }
 
-  addAnswerToQuestion(questionId: number){
-    this.answers(questionId).push(this.newAnswer());
+  addAnswerToQuestion(indexQ: number){
+    this.answers(indexQ).push(this.newAnswer());
+    this.checkValidation();
   }
 
   deleteAnswer(indexQ: number, indexA: number){
     (this._form.get('questions.'+indexQ+'.answers') as FormArray).removeAt(indexA);
+    this.checkValidation();
   }
 
   deleteQuestion(indexQ: number){
     (this._form.get('questions') as FormArray).removeAt(indexQ);
+    this.checkValidation();
   }
 
   updateAnswerIsCorrect(indexQ: number, indexA: number){
     let b = this.answers(indexQ).at(indexA)?.get('isCorrect')?.value;
     this.answers(indexQ).at(indexA)?.patchValue({isCorrect:!b});
-    //this.answers(indexQ).at(indexA)?.setErrors({'incorrect':b});
+    this.checkValidation();
   }
 
   answerHasCorrectAnswer(indexQ: number): boolean{
@@ -100,6 +89,25 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     return false;
   }
 
+  /**
+   * Refresh la validation. Nécessaire car l'ajout de FormGroup/Array ne déclenche pas forcément la validation
+   */
+  checkValidation(){
+    setTimeout(()=>{
+      for (let i = 0; i < this.questions().length; i++) {
+        const answersArray = this._form.get('questions.' + i + '.answers') as FormArray;
+        for (let j = 0; j < answersArray.length; j++) {
+          answersArray.at(j).updateValueAndValidity();
+        }
+      }
+      (this._form.get('questions') as FormArray).updateValueAndValidity();
+    })
+  }
+
+  /**
+   * Ajoute une nouvelle question au formulaire
+   * Le validateur qui vérifie qu'il y ai au moins une checkbox de cochée ne marche pas
+   */
   newQuestion(): FormGroup{
     return new FormGroup({
       textQuestion: new FormControl('', Validators.compose([
@@ -135,25 +143,16 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     });
   }
 
-  /**
-   * Returns private property _cancel$
-   */
   @Output('cancel')
   get cancel$(): EventEmitter<void> {
     return this._cancel$;
   }
 
-  /**
-   * Returns private property _submit$
-   */
   @Output('submit')
   get submit$(): EventEmitter<Quiz> {
     return this._submit$;
   }
 
-  /**
-   * Function to handle component update
-   */
   ngOnChanges(record: any): void {
     if (record.quiz && record.quiz.currentValue) {
       this._quiz = record.quiz.currentValue;
@@ -179,21 +178,13 @@ export class CreateQuizComponent implements OnInit, OnChanges {
       };
       this._isUpdateMode = false;
     }
-
-    // update form's values with quiz
     this._form.patchValue(this._quiz);
   }
 
-  /**
-   * Function to emit event to cancel process
-   */
   cancel(): void {
     this._cancel$.emit();
   }
 
-  /**
-   * Function to emit event to submit form and person
-   */
   submit(quiz: Quiz): void {
     //this._submit$.emit(quiz);
     this._httpClient.post("http://localhost:3000/quiz",this._form.value).subscribe(response => {
