@@ -25,7 +25,6 @@ import {
 } from '@nestjs/swagger';
 import { CreateQuizDto } from './dto/quiz.dto';
 import { QuizSubmissionDto } from './dto/quiz-sub.dto';
-import { JwtStrategy } from '../auth/strategy/jwt.strategy';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @ApiTags('quiz')
