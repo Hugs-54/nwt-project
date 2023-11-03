@@ -14,13 +14,20 @@ export class QuizService {
     private readonly quizSubmissionModel: Model<QuizSubmission>,
   ) {}
 
-  async create(data: Partial<Quiz>): Promise<Quiz> {
-    const createdQuiz = new this.quizModel(data);
+  async create(userId: string, data: Partial<Quiz>): Promise<Quiz> {
+    const createdQuiz = new this.quizModel({
+      ...data, // Spreading the existing data
+      user: userId, // Adding the userId to the quiz data
+    });
     return createdQuiz.save();
   }
 
   async findAll(): Promise<Quiz[]> {
     return this.quizModel.find().exec();
+  }
+
+  async findAllByUser(userId: string): Promise<Quiz[]> {
+    return this.quizModel.find({ user: userId }).exec(); // Find quizzes where the user field matches the userId
   }
 
   async findById(id: string): Promise<Quiz> {
