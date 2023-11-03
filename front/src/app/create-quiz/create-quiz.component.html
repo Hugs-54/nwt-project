@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <button *ngIf="answers(i).length < 4" type="button" class="btn btn-outline-info d-grid mx-auto" (click)="addAnswerToQuestion(i)"><strong>+</strong></button>
-                        <div *ngIf="!answerHasCorrectAnswer(i)" class="form-text ps-2" id="basic-addon4">
+                        <div *ngIf="form.get('questions.' + i + '.answers')?.hasError('atLeastOneCheckboxChecked')" class="form-text ps-2" id="basic-addon4">
                             Au moins une réponse doit être définie comme correcte.
                         </div>
                     </div>
