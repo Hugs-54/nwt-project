@@ -5,9 +5,9 @@ import { CustomValidators } from '../create-quiz/custom-validators';
 import { LoginRegisterService } from '../services/login-register.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-login-register',
+  templateUrl: './login-register.component.html',
+  styleUrls: ['./login-register.component.css']
 })
 export class LoginComponent {
   private _loginRegister: LoginRegister;

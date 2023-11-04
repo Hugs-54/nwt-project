@@ -4,7 +4,7 @@ import { QuizComponent } from './quiz/quiz.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { MyQuizzesComponent } from './my-quizzes/my-quizzes.component';
 import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login-register/login-register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

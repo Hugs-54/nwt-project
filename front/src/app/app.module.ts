@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MyQuizzesComponent } from './my-quizzes/my-quizzes.component';
 import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login-register/login-register.component';
 
 @NgModule({
   declarations: [

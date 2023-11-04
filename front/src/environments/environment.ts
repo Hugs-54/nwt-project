@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   backend: {
     protocol: 'http',
     host: 'localhost',
