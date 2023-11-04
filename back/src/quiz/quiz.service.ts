@@ -22,8 +22,8 @@ export class QuizService {
     return createdQuiz.save();
   }
 
-  async findAll(): Promise<Quiz[]> {
-    return this.quizModel.find().exec();
+  async findAll(userId: string): Promise<Quiz[]> {
+    return this.quizModel.find({ user: { $ne: userId } }).exec();
   }
 
   async findAllByUser(userId: string): Promise<Quiz[]> {
@@ -68,6 +68,7 @@ export class QuizService {
   async saveSubmission(
     userId: string,
     quizSubmissionDto: QuizSubmissionDto,
+    score: number,
   ): Promise<QuizSubmission> {
     const submission = new this.quizSubmissionModel({
       user: userId,
@@ -76,6 +77,7 @@ export class QuizService {
         questionId: questionSubmission.questionId,
         selectedAnswers: questionSubmission.selectedAnswers,
       })),
+      score: score,
     });
     return submission.save();
   }
@@ -131,5 +133,22 @@ export class QuizService {
     }
 
     return true;
+  }
+
+  async findUserQuizScore(
+    userId: string,
+    quizId: string,
+  ): Promise<number | null> {
+    const quizSubmission = await this.quizSubmissionModel
+      .findOne(
+        {
+          user: userId,
+          quiz: quizId,
+        },
+        'score',
+      )
+      .exec();
+
+    return quizSubmission ? quizSubmission.score : null;
   }
 }

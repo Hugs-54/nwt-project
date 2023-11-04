@@ -44,10 +44,12 @@ export class QuizController {
     return this.quizService.create(req.user._id, quizDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOkResponse({ description: 'Liste de tous les quizz.' })
-  async findAll(): Promise<Quiz[]> {
-    return this.quizService.findAll();
+  async findAll(@Request() req): Promise<Quiz[]> {
+    const userId = req.user._id;
+    return this.quizService.findAll(userId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -103,7 +105,18 @@ export class QuizController {
       userId,
       quizSubmissionDto,
     );
-    await this.quizService.saveSubmission(userId, quizSubmissionDto);
+    await this.quizService.saveSubmission(userId, quizSubmissionDto, result);
     return result;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:quizId/score')
+  async getUserQuizScore(
+    @Request() req,
+    @Param('quizId') quizId: string,
+  ): Promise<{ score: number | null }> {
+    const userId = req.user._id;
+    const score = await this.quizService.findUserQuizScore(userId, quizId);
+    return { score };
   }
 }

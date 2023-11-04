@@ -7,7 +7,7 @@ export interface QuizSubmission extends Document {
     questionId: Types.ObjectId;
     selectedAnswers: Types.ObjectId[];
   }[];
-  score?: number;
+  score: number;
   timestamp: Date;
 }
 
