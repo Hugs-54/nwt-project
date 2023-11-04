@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Quiz } from '../types/quiz.type';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, defaultIfEmpty, filter } from 'rxjs';
+import { Observable, defaultIfEmpty, filter, map } from 'rxjs';
 import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
-
   // private property to store default person
   private _defaultQuiz: Quiz;
 
@@ -78,9 +77,25 @@ export class QuizService {
   }
 
   /**
+   * Function to return list of quiz of a user
+   */
+  fetchByUser(): Observable<Quiz[]> {
+    return this._http.get<Quiz[]>(this._baseService.backenURL.myQuiz, this._baseService.options(true))
+      .pipe(
+        filter((quiz: any) => !!quiz),
+        defaultIfEmpty([])
+      );
+  }
+
+  /**
    * Function to return one quiz for current id
    */
   fetchOne(id: string): Observable<Quiz> {
     return this._http.get<Quiz>(this._baseService.backenURL.oneQuiz.replace(':id', id));
   }
+
+  delete(id: string) {
+    return this._http.delete<Quiz>(this._baseService.backenURL.oneQuiz.replace(':id', id));
+  }
+
 }

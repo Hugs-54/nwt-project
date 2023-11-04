@@ -10,6 +10,7 @@ export const environment = {
             oneQuiz: '/quiz/:id',
             login: '/auth/login',
             register: '/auth/register',
+            myQuiz: '/quiz/my-quiz',
         },
     },
 };

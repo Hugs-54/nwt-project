@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseService } from './services/base.service';
+import { LoginRegisterService } from './services/login-register.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,7 @@ import { BaseService } from './services/base.service';
 })
 export class AppComponent {
 
-  constructor(private _baseService: BaseService) {
+  constructor(private _baseService: BaseService, private _loginRegisterService: LoginRegisterService) {
 
   }
 
@@ -17,6 +18,6 @@ export class AppComponent {
   }
 
   disconnect() {
-    this._baseService.clearToken();
+    this._loginRegisterService.logout();
   }
 }

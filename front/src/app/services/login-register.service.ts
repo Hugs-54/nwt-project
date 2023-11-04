@@ -8,23 +8,19 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class LoginRegisterService {
-
-  constructor(private _http: HttpClient, private _router: Router, private _baseService: BaseService) { }
+  constructor(private _http: HttpClient, private _baseService: BaseService) { }
 
   login(user: LoginRegister) {
-    this._http.post<LoginRegister>(this._baseService.backenURL.login, user, this._baseService.options(false))
-      .subscribe({
-        error: (e) => console.error(e),
-        complete: () => console.info('Connexion effectuée avec succès'),
-        next: (token) => { this._baseService.storeToken(token), this._router.navigateByUrl("/my-quizzes") }
-      });
+    return this._http.post<LoginRegister>(this._baseService.backenURL.login, user, this._baseService.options(false))
   }
 
   register(user: LoginRegister) {
-    this._http.post<LoginRegister>(this._baseService.backenURL.register, user)
-      .subscribe({
-        error: (e) => console.error(e),
-        complete: () => console.info('Profil créé avec succès')
-      });
+    return this._http.post<LoginRegister>(this._baseService.backenURL.register, user);
   }
+
+  logout() {
+    this._http.post<LoginRegister>(this._baseService.backenURL.logout, this._baseService.options(true));
+    this._baseService.clearToken();
+  }
+
 }

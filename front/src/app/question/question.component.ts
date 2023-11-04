@@ -11,9 +11,9 @@ export class QuestionComponent {
 
   private _questionId: number;
   private _question: Question;
-  @Output() setSelected = new EventEmitter<{questionId: number, answerId: number }>();
+  @Output() setSelected = new EventEmitter<{ questionId: number, answerId: number }>();
 
-  constructor(private _router: Router) {
+  constructor() {
     this._question = {} as Question;
     this._questionId = 0;
   }
@@ -33,11 +33,11 @@ export class QuestionComponent {
   }
 
   get questionId(): string {
-    return this._questionId+"";
+    return this._questionId + "";
   }
 
-  onAnswerChange(answer: number){
-    this.setSelected.emit({questionId: this._questionId, answerId: answer });
+  onAnswerChange(answer: number) {
+    this.setSelected.emit({ questionId: this._questionId, answerId: answer });
   }
 
 }

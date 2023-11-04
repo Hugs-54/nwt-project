@@ -8,7 +8,7 @@
                 <form novalidate [formGroup]="form" (ngSubmit)="onSubmit()">
 
                     <!-- Choisir entre connexion/créer un compte -->
-                    <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                    <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-3">
                         <div class="d-flex mx-auto my-switch text-body-secondary">
                             <div class="toggle">
                                 <input type="radio" name="loginOrRegister" id="login" checked (click)="setWantToLogin(true)" />
@@ -18,6 +18,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <p *ngIf="thereIsProblem" class="text-center text-danger" id="basic-addon4">
+                        {{problemText}}
+                    </p>
+
+                    <p *ngIf="accountCreatedWithSucess" class="text-center text-success" id="basic-addon4">
+                        Compte créé avec succès.
+                    </p>
+
 
                     <!-- Separator -->
                     <div class="divider d-flex align-items-center my-4"></div>

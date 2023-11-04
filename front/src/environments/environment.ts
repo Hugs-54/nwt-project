@@ -10,6 +10,8 @@ export const environment = {
       oneQuiz: '/quiz/:id',
       login: '/auth/login',
       register: '/auth/register',
+      logout: '/auth/logout',
+      myQuiz: '/quiz/my-quiz',
     },
   },
 };

@@ -7,10 +7,10 @@ import { QuizComponent } from './quiz/quiz.component';
 import { QuestionComponent } from './question/question.component';
 import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MyQuizzesComponent } from './my-quizzes/my-quizzes.component';
-import { SharedQuizzesComponent } from './shared-quizzes/shared-quizzes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './login-register/login-register.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { ButtonAccessQuizComponent } from './button-access-quiz/button-access-quiz.component';
+import { QuizzesComponent } from './quizzes/quizzes.component';
 
 @NgModule({
   declarations: [
@@ -18,9 +18,9 @@ import { LoginComponent } from './login-register/login-register.component';
     QuizComponent,
     QuestionComponent,
     CreateQuizComponent,
-    MyQuizzesComponent,
-    SharedQuizzesComponent,
-    LoginComponent,
+    LoginRegisterComponent,
+    ButtonAccessQuizComponent,
+    QuizzesComponent,
   ],
   imports: [
     BrowserModule,
