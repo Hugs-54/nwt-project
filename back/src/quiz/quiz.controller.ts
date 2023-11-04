@@ -25,7 +25,6 @@ import {
 } from '@nestjs/swagger';
 import { CreateQuizDto } from './dto/quiz.dto';
 import { QuizSubmissionDto } from './dto/quiz-sub.dto';
-import { JwtStrategy } from '../auth/strategy/jwt.strategy';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @ApiTags('quiz')
@@ -33,6 +32,7 @@ import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiCreatedResponse({ description: 'Le quiz a été créé avec succès.' })
   @ApiBadRequestResponse({ description: 'La demande est mal formée.' })
@@ -40,14 +40,21 @@ export class QuizController {
     type: CreateQuizDto,
     description: 'Données pour créer un nouveau quiz.',
   })
-  async create(@Body() quizDto: Partial<Quiz>): Promise<Quiz> {
-    return this.quizService.create(quizDto);
+  async create(@Request() req, @Body() quizDto: Partial<Quiz>): Promise<Quiz> {
+    return this.quizService.create(req.user._id, quizDto);
   }
 
   @Get()
   @ApiOkResponse({ description: 'Liste de tous les quizz.' })
   async findAll(): Promise<Quiz[]> {
     return this.quizService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/my-quiz')
+  async getUserQuizzes(@Request() req): Promise<Quiz[]> {
+    const userId = req.user._id;
+    return this.quizService.findAllByUser(userId);
   }
 
   @ApiOkResponse({ description: 'Retourne le quiz par ID.' })
@@ -91,7 +98,7 @@ export class QuizController {
     @Request() req,
     @Body() quizSubmissionDto: QuizSubmissionDto,
   ): Promise<any> {
-    const userId = req.user.userId; // Récupération de l'ID utilisateur à partir du token
+    const userId = req.user._id;
     const result = await this.quizService.evaluateSubmission(
       userId,
       quizSubmissionDto,

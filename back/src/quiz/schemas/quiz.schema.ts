@@ -27,6 +27,7 @@ export interface Quiz extends Document {
 
 export const QuizSchema = new Schema(
   {
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     title: {
       type: String,
       required: true,

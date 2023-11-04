@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { QuizService } from './quiz.service';
 import { QuizController } from './quiz.controller';
 import { Module } from '@nestjs/common';
-import { AuthModule } from '../auth/auth.module'; // Assurez-vous que le chemin d'importation est correct
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
