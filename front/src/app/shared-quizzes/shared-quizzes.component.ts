@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Quiz } from '../types/question.type';
+import { Quiz } from '../types/quiz.type';
 import { Router } from '@angular/router';
+import { QuizService } from '../services/quiz.service';
+import { BaseService } from '../services/base.service';
 
 @Component({
   selector: 'app-shared-quizzes',
@@ -9,29 +10,26 @@ import { Router } from '@angular/router';
   styleUrls: ['./shared-quizzes.component.css']
 })
 export class SharedQuizzesComponent {
-  private _quizzes : Quiz[];
+  private _quizzes: Quiz[];
 
-  constructor(private _router: Router, private _httpClient: HttpClient) {
+  constructor(private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
     this._quizzes = [] as Quiz[];
   }
 
   ngOnInit() {
-    this.fetchQuiz();
+    this._quizService
+      .fetch()
+      .subscribe({ next: (quiz: Quiz[]) => this._quizzes = quiz });
+
+    if (!this._baseService.isConnected()) {
+      this._router.navigate(['/login']);
+    }
   }
 
-  fetchQuiz() {
-    const apiUrl = 'http://localhost:3000/quiz';
-    this._httpClient.get<Quiz[]>(apiUrl).subscribe(
-      (response) => {
-        this._quizzes = response;
-        console.log(this.quizzes);
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des quiz :', error);
-      }
-    );
+  ngOnChange() {
+
   }
-  
+
   get quizzes(): Quiz[] {
     return this._quizzes;
   }

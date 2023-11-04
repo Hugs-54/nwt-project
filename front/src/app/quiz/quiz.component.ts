@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { Question, Quiz } from '../types/question.type';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { Question, Quiz } from '../types/quiz.type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { QuizService } from '../services/quiz.service';
+import { filter, merge, mergeMap } from 'rxjs';
+import { BaseService } from '../services/base.service';
 
 @Component({
   selector: 'app-quiz',
@@ -9,41 +11,39 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent {
-  private _quiz : Quiz;
-  private _quizId: string;
+  private _quiz: Quiz;
 
-  constructor(private _route: ActivatedRoute, private _httpClient: HttpClient) {
+  constructor(private _route: ActivatedRoute, private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
     this._quiz = {} as Quiz;
-    this._quizId = "";
   }
 
   ngOnInit() {
-    this.fetchQuiz();
+    merge(
+      this._route.params.pipe(
+        filter((params: any) => !!params.id),
+        mergeMap((params: any) => this._quizService.fetchOne(params.id))
+      )
+    )
+      .subscribe({
+        next: (quiz: Quiz) => this._quiz = quiz,
+        error: () => {
+          // manage error when quiz doesn't exist in DB
+          this._quiz = this._quizService.defaultQuiz;
+        }
+      });
+    if (!this._baseService.isConnected()) {
+      this._router.navigate(['/login']);
+    }
   }
 
-  fetchQuiz() {
-    this._route.params.subscribe(params => {this._quizId = params['id'];});
-    const apiUrl = `http://localhost:3000/quiz/${this._quizId}`;
-
-    this._httpClient.get<Quiz>(apiUrl).subscribe(
-      (response) => {
-        this._quiz = response;
-        this.addIsSelectedToAnswers();
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération du quiz :', error);
-      }
-    );
-  }
-  
   get quiz(): Question[] {
     return this._quiz.questions;
   }
 
-  get title(): string{
+  get title(): string {
     return this._quiz.title;
   }
-  
+
   /**
    * Rajoute un attribut isSelected : boolean à toutes les réponses
    * Ce champ sert à enregistrer les réponses de l'utilisateur
@@ -57,12 +57,12 @@ export class QuizComponent {
     });
   }
 
-  changeAnswerSelected(event: { questionId: number; answerId: number }){
+  changeAnswerSelected(event: { questionId: number; answerId: number }) {
     var isSelected = this._quiz.questions[event.questionId].answers[event.answerId].isSelected;
     this._quiz.questions[event.questionId].answers[event.answerId].isSelected = !isSelected;
   }
 
-  validateQuiz(){
+  validateQuiz() {
     let score: number = 0.00;
 
     this._quiz.questions.forEach((question) => {
@@ -90,7 +90,7 @@ export class QuizComponent {
     });
     alert(`Score: ${score.toFixed(2)}/${this._quiz.questions.length}`);
     //console.log(this._quiz);
-    
+
   }
 }
 

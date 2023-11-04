@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { BaseService } from '../services/base.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-quizzes',
@@ -7,4 +9,13 @@ import { Component } from '@angular/core';
 })
 export class MyQuizzesComponent {
 
+  constructor(private _baseService: BaseService, private _router: Router) {
+
+  }
+
+  ngOnInit() {
+    if (!this._baseService.isConnected()) {
+      this._router.navigate(['/login']);
+    }
+  }
 }

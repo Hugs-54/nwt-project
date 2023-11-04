@@ -3,16 +3,21 @@
         <div class="container-fluid">
             <ul class="nav nav-pills">
                 <li class="nav-item">
-                    <a [routerLink]="['/home']" class="nav-link" [routerLinkActive]="['active']">Se connecter</a>
+                    <div *ngIf="isLogged()">
+                        <a [routerLink]="['/login']" class="nav-link" [routerLinkActive]="['active']" (click)="disconnect()">Se déconnecter</a>
+                    </div>
+                    <div *ngIf="!isLogged()">
+                        <a [routerLink]="['/login']" class="nav-link" [routerLinkActive]="['active']">Se connecter</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer Quiz</a>
-                </li>
-                <li class="nav-item">
+                <li class="nav-item" *ngIf="isLogged()">
                     <a [routerLink]="['/my-quizzes']" class="nav-link" [routerLinkActive]="['active']">Mes Quiz</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" *ngIf="isLogged()">
                     <a [routerLink]="['/shared-quizzes']" class="nav-link" [routerLinkActive]="['active']">Participer aux Quiz</a>
+                </li>
+                <li class="nav-item" *ngIf="isLogged()">
+                    <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer Quiz</a>
                 </li>
             </ul>
         </div>

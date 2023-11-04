@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BaseService } from './services/base.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular';
+
+  constructor(private _baseService: BaseService) {
+
+  }
+
+  isLogged() {
+    return this._baseService.isConnected();
+  }
+
+  disconnect() {
+    this._baseService.clearToken();
+  }
 }
