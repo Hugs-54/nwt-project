@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { LoginRegister } from '../types/login-register.type';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from '../create-quiz/custom-validators';
+import { LoginRegister, TokenResponse } from '../types/login-register.type';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginRegisterService } from '../services/login-register.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseService } from '../services/base.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-register',
@@ -97,12 +96,13 @@ export class LoginRegisterComponent {
           })
         )
         .subscribe({
-          complete: () => console.info('Connexion effectuée avec succès'),
-          next: (token) => {
-            this._baseService.storeToken(token);
+          next: (event: any) => {
+            this._baseService.storeToken(event.access_token);
             this._router.navigateByUrl("/my-quizzes");
-          }
+          },
+          complete: () => console.info('Connexion effectuée avec succès'),
         });
+
     } else {
       this._loginRegisterService.register(this._form.value as LoginRegister)
         .subscribe({

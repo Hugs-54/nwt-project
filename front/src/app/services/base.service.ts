@@ -28,14 +28,14 @@ export class BaseService {
     return this._backendURL;
   }
 
-  storeToken(token: HttpEvent<LoginRegister>) {
-    localStorage.setItem('token', JSON.stringify(token));
+  storeToken(token: string) {
+    localStorage.setItem('token', token);
   }
 
   getToken() {
     const tokenString = localStorage.getItem('token');
     if (tokenString) {
-      return JSON.parse(tokenString);
+      return tokenString;
     }
     return null;
   }

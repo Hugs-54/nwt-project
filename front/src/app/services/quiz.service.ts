@@ -69,9 +69,9 @@ export class QuizService {
    * Function to return list of quiz
    */
   fetch(): Observable<Quiz[]> {
-    return this._http.get<Quiz[]>(this._baseService.backenURL.allQuiz)
+    return this._http.get<Quiz[]>(this._baseService.backenURL.allQuiz, this._baseService.options(true))
       .pipe(
-        filter((quiz: Quiz[]) => !!quiz),
+        filter((quiz: any) => !!quiz),
         defaultIfEmpty([])
       );
   }
@@ -95,7 +95,7 @@ export class QuizService {
   }
 
   delete(id: string) {
-    return this._http.delete<Quiz>(this._baseService.backenURL.oneQuiz.replace(':id', id));
+    return this._http.delete<any>(this._baseService.backenURL.oneQuiz.replace(':id', id));
   }
 
 }

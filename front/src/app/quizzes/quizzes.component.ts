@@ -25,11 +25,8 @@ export class QuizzesComponent {
 
     if (this._activatedRoute.snapshot.url[0].path === "my-quizzes") {
       this._isCreator = true;
-      /* this._quizService
-      .fetchByUser()
-      .subscribe({ next: (quiz: Quiz[]) => this._quizzes = quiz }); */
       this._quizService
-        .fetch()
+        .fetchByUser()
         .subscribe({ next: (quiz: Quiz[]) => this._quizzes = quiz });
     } else {
       this._quizService
