@@ -118,4 +118,19 @@ export class QuizController {
     const userId = req.user._id;
     return this.quizService.findUserQuizScore(userId, quizId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:quizId/leaderboard')
+  async getQuizLeaderboard(
+      @Param('quizId') quizId: string,
+  ): Promise<{ leaderboard: any[], totalScore: number }> {
+    return await this.quizService.getLeaderboard(quizId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:quizId/details')
+  async getQuizDetailsWithResponses(@Param('quizId') quizId: string): Promise<any> {
+    return this.quizService.getQuizDetailsWithResponses(quizId);
+  }
 }
+

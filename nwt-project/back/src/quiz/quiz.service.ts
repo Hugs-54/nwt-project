@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, {Model, Types} from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Quiz } from './schemas/quiz.schema';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { QuizSubmission } from './schemas/quiz-sub.schema';
@@ -22,8 +22,8 @@ export class QuizService {
     return createdQuiz.save();
   }
 
-  async findAll(userId: string): Promise<Quiz[]> {
-    return this.quizModel.find({ user: { $ne: userId } }).exec();
+  async findAll(): Promise<Quiz[]> {
+    return this.quizModel.find().exec();
   }
 
   async findAllByUser(userId: string): Promise<Quiz[]> {
@@ -68,7 +68,6 @@ export class QuizService {
   async saveSubmission(
     userId: string,
     quizSubmissionDto: QuizSubmissionDto,
-    score: number,
   ): Promise<QuizSubmission> {
     const submission = new this.quizSubmissionModel({
       user: userId,
@@ -77,7 +76,6 @@ export class QuizService {
         questionId: questionSubmission.questionId,
         selectedAnswers: questionSubmission.selectedAnswers,
       })),
-      score: score,
     });
     return submission.save();
   }
@@ -133,105 +131,5 @@ export class QuizService {
     }
 
     return true;
-  }
-
-  async findUserQuizScore(
-    userId: string,
-    quizId: string,
-  ): Promise<{ userScore: number | null; totalScore: number }> {
-
-    const quizSubmission = await this.quizSubmissionModel
-      .findOne({ user: userId, quiz: quizId }, 'score')
-      .exec();
-
-    const originalQuiz = await this.quizModel.findById(quizId);
-    const totalScore = originalQuiz.questions.length;
-
-    return {
-      userScore: quizSubmission ? quizSubmission.score : null,
-      totalScore: totalScore,
-    };
-  }
-
-  async getLeaderboard(quizId: string): Promise<{ leaderboard: any[], totalScore: number }> {
-    // Récupérer le quiz pour obtenir le score total (nombre de questions)
-    const originalQuiz = await this.quizModel.findById(quizId);
-    if (!originalQuiz) {
-      throw new Error('Quiz not found');
-    }
-    const totalScore = originalQuiz.questions.length;
-
-    // Construire le leaderboard sans répéter le score total
-    const leaderboard = await this.quizSubmissionModel.aggregate([
-      { $match: { quiz: new Types.ObjectId(quizId) } },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user',
-          foreignField: '_id',
-          as: 'userInfo'
-        }
-      },
-      { $unwind: '$userInfo' },
-      {
-        $project: {
-          _id: 0,
-          user: '$userInfo.username',
-          score: 1
-        }
-      },
-      { $sort: { score: -1, user: -1 } } // Trie par score descendant, puis par nom d'utilisateur descendant
-    ]);
-
-    // Renvoyer le leaderboard avec le score total en tant que propriété distincte
-    return {
-      leaderboard,
-      totalScore
-    };
-  }
-
-  async getQuizDetailsWithResponses(quizId: string): Promise<any[]> {
-    const quiz = await this.quizModel.findById(quizId).lean(); // Utilisez `.lean()` pour obtenir un objet JavaScript simple
-
-    if (!quiz) {
-      throw new Error('Quiz not found');
-    }
-
-    return Promise.all(quiz.questions.map(async (question) => {
-      const answersWithUsersPromises = question.answers.map(async (answer) => {
-        // Ici, nous devons définir le type retourné par la requête après population
-        interface User {
-          _id: string;
-          username: string; // ou tout autre champ approprié pour l'identification de l'utilisateur
-        }
-
-        interface QuizSubmissionWithUser {
-          user: User;
-        }
-
-        // Effectuez la recherche et la population
-        const submissions: QuizSubmissionWithUser[] = await this.quizSubmissionModel.find(
-            {
-              'quiz': quiz._id,
-              'answers.questionId': question._id,
-              'answers.selectedAnswers': answer._id,
-            },
-        ).populate('user', 'username').lean(); // .lean() pour obtenir des objets JavaScript simples
-
-        // Utilisez le résultat en mappant sur le tableau `submissions`
-        return {
-          answerText: answer.textAnswer,
-          isCorrect: answer.isCorrect,
-          users: submissions.map(sub => sub.user.username), // Maintenant TypeScript devrait être content
-        };
-      });
-
-      const answersWithUsers = await Promise.all(answersWithUsersPromises);
-
-      return {
-        questionText: question.textQuestion,
-        answers: answersWithUsers,
-      };
-    }));
   }
 }
