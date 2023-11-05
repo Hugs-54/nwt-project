@@ -6,13 +6,11 @@
         <button type="button" class="btn btn-outline-primary fs-4" [id]="'rank'+id" [routerLink]="['/quiz', id]">Classement</button>
     </div>
     <div *ngIf="!isCreator">
-        <!-- Ngif a déjà répondu -->
-        <div class="input-group mx-auto justify-content-center align-items-center ">
-            <span class="input-group-text fs-4 w-25" id="quiz.title">{{title}}</span>
-            <span class="input-group-text fs-4">Score 2/4</span>
+        <div *ngIf="hasAlreadyRespond" class="width-group input-group mx-auto justify-content-center align-items-center ">
+            <span class="input-group-text fs-4 w-25 " id="quiz.title">{{title}}</span>
+            <span class="input-group-text fs-4">{{score}}</span>
         </div>
-        <!-- Ngif n'a pas déjà répondu -->
-        <div class="input-group mx-auto justify-content-center align-items-center ">
+        <div *ngIf="!hasAlreadyRespond" class="input-group mx-auto justify-content-center align-items-center ">
             <span class="input-group-text fs-4 w-25" id="quiz.title">{{title}}</span>
             <button type="button" class="btn btn-outline-primary fs-4" [id]="'access'+id" [routerLink]="['/quiz', id]">Participer</button>
         </div>

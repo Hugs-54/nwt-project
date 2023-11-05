@@ -1,9 +1,39 @@
 <div class="quiz-container" id="quiz">
-    <h1>{{title}}</h1>
-    <app-question class="question" 
-        (setSelected)="changeAnswerSelected($event)"
-        *ngFor="let question of quiz; let i = index" 
-        [question]="question" [questionId]="i">
-    </app-question>
-    <button type="button" id="submit" class="btn btn-outline-primary fs-4" (click)="validateQuiz()">Envoyer</button>
+    <h1 class="text-center">{{ title }}</h1>
+    <div *ngFor="let question of quiz; let i = index">
+        <div class="list-group box mb-4">
+            <div class="list-group-item width-group mx-auto text-center">
+                <h3 class="text-center mb-4">
+                    {{ question.textQuestion }}
+                </h3>
+                <div class="gap-2">
+                    <div class="d-grid col-8 mx-auto mb-2" *ngFor="let answer of question.answers; let j = index">
+                        <input type="checkbox" class="btn-check" [id]="question._id + '' + j" autocomplete="off" (click)="changeAnswerSelected(i,j)">
+                        <label class="btn btn-outline-primary" [for]="question._id + '' + j">{{ answer.textAnswer }}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="submit" class="btn btn-outline-primary fs-4 mt-4 mx-auto d-block" (click)="sendForm()" data-bs-toggle="modal" data-bs-target="#showResult">Envoyer</button>
+</div>
+
+<div class="modal fade" id="showResult" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showResultLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="resultModalLabel">Résultat</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" [routerLink]="['/shared-quizzes']" [routerLinkActive]="['active']" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body text-success text-center">
+                Votre score est de {{score}}/{{quiz.length}}.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <a [routerLink]="['/shared-quizzes']" class="nav-link" [routerLinkActive]="['active']">Fermer</a>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

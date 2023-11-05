@@ -98,6 +98,7 @@ export class LoginRegisterComponent {
         .subscribe({
           next: (event: any) => {
             this._baseService.storeToken(event.access_token);
+            this._baseService.storeName(this._form.value.username);
             this._router.navigateByUrl("/my-quizzes");
           },
           complete: () => console.info('Connexion effectuée avec succès'),

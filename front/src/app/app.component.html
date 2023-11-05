@@ -17,8 +17,11 @@
                     <a [routerLink]="['/shared-quizzes']" class="nav-link" [routerLinkActive]="['active']">Participer aux Quiz</a>
                 </li>
                 <li class="nav-item" *ngIf="isLogged()">
-                    <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer Quiz</a>
+                    <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer un Quiz</a>
                 </li>
+                <span class="navbar-text text-secondary ms-4" *ngIf="isLogged()">
+                    {{name}}
+                </span>
             </ul>
         </div>
     </nav>

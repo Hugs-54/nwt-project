@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Quiz } from '../types/quiz.type';
+import { Quiz, SubmitQuiz } from '../types/quiz.type';
 import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, defaultIfEmpty, filter, map } from 'rxjs';
@@ -98,4 +98,14 @@ export class QuizService {
     return this._http.delete<any>(this._baseService.backenURL.oneQuiz.replace(':id', id));
   }
 
+  /**
+   * Obtenir le score d'un utilisateur pour un quiz donné
+   */
+  fetchScore(quizId: string) {
+    return this._http.get<string>(this._baseService.backenURL.score.replace(':quizId', quizId), this._baseService.options(true));
+  }
+
+  submitQuiz(quiz: SubmitQuiz) {
+    return this._http.post<string>(this._baseService.backenURL.submitQuiz, quiz, this._baseService.options(true))
+  }
 }

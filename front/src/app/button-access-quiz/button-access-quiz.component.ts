@@ -9,14 +9,30 @@ import { QuizService } from '../services/quiz.service';
 export class ButtonAccessQuizComponent {
 
   private _title: string;
-  private _id: string;
+  private _quizId: string;
   private _isCreator: boolean;
+  private _score: string;
+  private _hasAlreadyRespond: boolean = false;
   @Output() quizDeleted = new EventEmitter<{ quizId: string }>();
 
   constructor(private _quizService: QuizService) {
     this._title = "";
-    this._id = "";
+    this._quizId = "";
+    this._score = "";
     this._isCreator = false;
+  }
+
+  ngOnInit() {
+    if (!this._isCreator) {
+      this._quizService.fetchScore(this._quizId)
+        .subscribe({
+          next: (response: any) => {
+            this._score = response.score;
+            this._hasAlreadyRespond = response.score === null ? false : true;
+            console.log(response);
+          }
+        });
+    }
   }
 
   @Input()
@@ -26,7 +42,7 @@ export class ButtonAccessQuizComponent {
 
   @Input()
   set id(id: string | undefined) {
-    this._id = !!id ? id : "";
+    this._quizId = !!id ? id : "";
   }
 
   @Input()
@@ -39,18 +55,26 @@ export class ButtonAccessQuizComponent {
   }
 
   get id() {
-    return this._id;
+    return this._quizId;
+  }
+
+  get hasAlreadyRespond() {
+    return this._hasAlreadyRespond;
   }
 
   get isCreator() {
     return this._isCreator;
   }
 
+  get score() {
+    return this._score;
+  }
+
   deleteQuiz() {
-    this._quizService.delete(this._id).subscribe({
+    this._quizService.delete(this._quizId).subscribe({
       error: (e) => console.error(e),
       complete: () => console.info("Quiz supprimé avec succès.")
     });
-    this.quizDeleted.emit({ quizId: this._id });
+    this.quizDeleted.emit({ quizId: this._quizId });
   }
 }

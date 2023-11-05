@@ -1,11 +1,21 @@
-.question{
-  display: block;
-  margin-bottom: 40px;
+.question {
+    display: block;
+    margin-bottom: 40px;
 }
 
 .quiz-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.width-group {
+    width: 100%;
+    min-width: 700px;
+}
+
+.box {
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.2);
 }

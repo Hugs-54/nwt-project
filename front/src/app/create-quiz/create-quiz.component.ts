@@ -143,17 +143,7 @@ export class CreateQuizComponent implements OnInit, OnChanges {
       ], CustomValidators.arrayContainsAtLeast(1))
     });
   }
-  /*
-    @Output('cancel')
-    get cancel$(): EventEmitter<void> {
-      return this._cancel$;
-    }
-  
-    @Output('submit')
-    get submit$(): EventEmitter<Quiz> {
-      return this._submit$;
-    }
-  */
+
   ngOnChanges(record: any): void {
     if (record.quiz && record.quiz.currentValue) {
       this._quiz = record.quiz.currentValue;
@@ -182,13 +172,8 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     this._form.patchValue(this._quiz);
   }
 
-  /*
-  cancel(): void {
-    this._cancel$.emit();
-  }*/
-
   onSubmit(): void {
-    //this._submit$.emit(quiz);
     this._quizService.create(this._form.value as Quiz);
+    this._form.reset();
   }
 }

@@ -32,6 +32,10 @@ export class BaseService {
     localStorage.setItem('token', token);
   }
 
+  storeName(username: string) {
+    localStorage.setItem('username', username);
+  }
+
   getToken() {
     const tokenString = localStorage.getItem('token');
     if (tokenString) {
@@ -40,8 +44,21 @@ export class BaseService {
     return null;
   }
 
+  getName() {
+    const nameString = localStorage.getItem('username');
+    if (nameString) {
+      return nameString;
+    }
+    return "";
+  }
+
   clearToken() {
     localStorage.removeItem('token');
+    this.clearName();
+  }
+
+  clearName() {
+    localStorage.removeItem('username');
   }
 
   isConnected(): boolean {

@@ -7,3 +7,8 @@
         </div>
     </div>
 </div>
+<div *ngIf="isCreator">
+    <button type="button" class="btn btn-primary d-flex mx-auto fs-3 mt-4">
+        <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer un quiz</a>
+    </button>
+</div>

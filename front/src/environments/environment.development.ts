@@ -12,6 +12,8 @@ export const environment = {
             register: '/auth/register',
             logout: '/auth/logout',
             myQuiz: '/quiz/my-quiz',
+            score: '/quiz/:quizId/score',
+            submitQuiz: '/quiz/submit-quiz',
         },
     },
 };

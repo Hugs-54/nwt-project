@@ -9,8 +9,18 @@ import { LoginRegisterService } from './services/login-register.service';
 })
 export class AppComponent {
 
-  constructor(private _baseService: BaseService, private _loginRegisterService: LoginRegisterService) {
+  private _name: string = "";
 
+  constructor(private _baseService: BaseService, private _loginRegisterService: LoginRegisterService) { }
+
+  ngDoCheck() {
+    if (this.isLogged()) {
+      this._name = this._baseService.getName();
+    }
+  }
+
+  get name() {
+    return this._name;
   }
 
   isLogged() {
