@@ -1,0 +1,11 @@
+.question{
+  display: block;
+  margin-bottom: 40px;
+}
+
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

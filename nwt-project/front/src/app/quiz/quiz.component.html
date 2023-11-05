@@ -1,0 +1,9 @@
+<div class="quiz-container" id="quiz">
+    <h1>{{title}}</h1>
+    <app-question class="question" 
+        (setSelected)="changeAnswerSelected($event)"
+        *ngFor="let question of quiz; let i = index" 
+        [question]="question" [questionId]="i">
+    </app-question>
+    <button type="button" id="submit" class="btn btn-outline-primary fs-4" (click)="validateQuiz()">Envoyer</button>
+</div>

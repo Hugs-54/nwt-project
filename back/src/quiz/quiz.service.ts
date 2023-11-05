@@ -138,17 +138,18 @@ export class QuizService {
   async findUserQuizScore(
     userId: string,
     quizId: string,
-  ): Promise<number | null> {
+  ): Promise<{ userScore: number | null; totalScore: number }> {
+
     const quizSubmission = await this.quizSubmissionModel
-      .findOne(
-        {
-          user: userId,
-          quiz: quizId,
-        },
-        'score',
-      )
+      .findOne({ user: userId, quiz: quizId }, 'score')
       .exec();
 
-    return quizSubmission ? quizSubmission.score : null;
+    const originalQuiz = await this.quizModel.findById(quizId);
+    const totalScore = originalQuiz.questions.length;
+
+    return {
+      userScore: quizSubmission ? quizSubmission.score : null,
+      totalScore: totalScore,
+    };
   }
 }

@@ -114,9 +114,8 @@ export class QuizController {
   async getUserQuizScore(
     @Request() req,
     @Param('quizId') quizId: string,
-  ): Promise<{ score: number | null }> {
+  ): Promise<{ userScore: number | null; totalScore: number }> {
     const userId = req.user._id;
-    const score = await this.quizService.findUserQuizScore(userId, quizId);
-    return { score };
+    return this.quizService.findUserQuizScore(userId, quizId);
   }
 }
