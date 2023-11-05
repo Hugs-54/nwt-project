@@ -7,6 +7,7 @@ import {
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cors from 'cors';
+import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

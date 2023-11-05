@@ -138,17 +138,37 @@ export class QuizService {
   async findUserQuizScore(
     userId: string,
     quizId: string,
-  ): Promise<number | null> {
+  ): Promise<{ userScore: number | null; totalScore: number }> {
+    console.log(
+      `Recherche de la soumission pour l'utilisateur ${userId} et le quiz ${quizId}`,
+    );
+
     const quizSubmission = await this.quizSubmissionModel
-      .findOne(
-        {
-          user: userId,
-          quiz: quizId,
-        },
-        'score',
-      )
+      .findOne({ user: userId, quiz: quizId }, 'score')
       .exec();
 
-    return quizSubmission ? quizSubmission.score : null;
+    if (!quizSubmission) {
+      console.log('Aucune soumission trouvée pour cet utilisateur et ce quiz');
+    } else {
+      console.log(`Score trouvé pour l'utilisateur: ${quizSubmission.score}`);
+    }
+
+    const originalQuiz = await this.quizModel.findById(quizId);
+    const totalScore = originalQuiz.questions.length;
+
+    console.log(`Score total pour le quiz: ${totalScore}`);
+
+    return {
+      userScore: quizSubmission ? quizSubmission.score : null,
+      totalScore: totalScore,
+    };
+  }
+
+  async getTotalQuizScore(quizId: string): Promise<number> {
+    // Récupérer le quiz original à partir de quizId
+    const originalQuiz = await this.findById(quizId);
+
+    // Le score total possible est le nombre de questions dans le quiz
+    return originalQuiz.questions.length;
   }
 }
