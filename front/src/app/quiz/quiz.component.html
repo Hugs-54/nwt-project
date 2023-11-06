@@ -26,7 +26,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" [routerLink]="['/shared-quizzes']" [routerLinkActive]="['active']" aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body text-success text-center">
+            <div *ngIf="isSubmited" class="modal-body text-success text-center">
                 Votre score est de {{score}}/{{quiz.length}}.
             </div>
             <div class="modal-footer">

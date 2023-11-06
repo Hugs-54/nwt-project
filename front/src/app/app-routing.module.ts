@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QuizComponent } from './quiz/quiz.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { CreateEditQuizComponent } from './create-edit-quiz/create-edit-quiz.component';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { QuizzesComponent } from './quizzes/quizzes.component';
 
@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'quiz/:id', component: QuizComponent },
   { path: 'my-quizzes', component: QuizzesComponent },
   { path: 'shared-quizzes', component: QuizzesComponent },
-  { path: 'create-quiz', component: CreateQuizComponent },
+  { path: 'create-quiz', component: CreateEditQuizComponent },
 ];
 
 @NgModule({

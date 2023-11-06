@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateQuizComponent } from './create-quiz.component';
+import { CreateQuizComponent } from './create-edit-quiz.component';
 
 describe('CreateQuizComponent', () => {
   let component: CreateQuizComponent;

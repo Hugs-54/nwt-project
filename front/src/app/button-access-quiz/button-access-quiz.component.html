@@ -1,18 +1,22 @@
-<div class="container mb-3">
-    <div class="input-group mx-auto justify-content-center align-items-center " *ngIf="isCreator">
-        <span class="input-group-text w-25 fs-4" id="quiz.title">{{title}}</span>
-        <button type="button" class="btn btn-outline-secondary fs-4" [id]="'change'+id" [routerLink]="['/quiz', id]">Modifier</button>
+<div class="container">
+    <div *ngIf="isCreator" class="input-group mx-auto justify-content-center align-items-center">
+        <span class="input-group-text fs-4 col-4" id="quiz.title">{{title}}</span>
+        <button type="button" class="btn btn-outline-secondary fs-4" [id]="'change'+id" [routerLink]="['/create-quiz']" [queryParams]="{quizId: id, editable: true}">Modifier</button>
         <button type="button" class="btn btn-outline-danger fs-4" [id]="'delete'+id" (click)="deleteQuiz()">Supprimer</button>
-        <button type="button" class="btn btn-outline-primary fs-4" [id]="'rank'+id" [routerLink]="['/quiz', id]">Classement</button>
+        <button type="button" class="btn btn-outline-success fs-4" [id]="'rank'+id" [routerLink]="['/quiz', id]">Classement</button>
     </div>
     <div *ngIf="!isCreator">
-        <div *ngIf="hasAlreadyRespond" class="width-group input-group mx-auto justify-content-center align-items-center ">
-            <span class="input-group-text fs-4 w-25 " id="quiz.title">{{title}}</span>
-            <span class="input-group-text fs-4">{{score}}</span>
+        <div *ngIf="hasAlreadyRespond" class="input-group mx-auto justify-content-center align-items-center ">
+            <span class="input-group-text fs-4 col-4 " id="quiz.title">{{title}}</span>
+            <!-- 
+                Finalement pas utilisé par manque de compréhension
+                <span class="input-group-text justify-content-center align-items-center fs-4 col-2">{{score}}/{{totalScore}}</span>
+                 -->
+            <button type="button" class="btn btn-outline-success fs-4 col-2" [id]="'access'+id" [routerLink]="['/quiz', id]">Classement</button>
         </div>
         <div *ngIf="!hasAlreadyRespond" class="input-group mx-auto justify-content-center align-items-center ">
-            <span class="input-group-text fs-4 w-25" id="quiz.title">{{title}}</span>
-            <button type="button" class="btn btn-outline-primary fs-4" [id]="'access'+id" [routerLink]="['/quiz', id]">Participer</button>
+            <span class="input-group-text fs-4 col-4 " id="quiz.title">{{title}}</span>
+            <button type="button" class="btn btn-outline-primary fs-4 col-2" [id]="'access'+id" [routerLink]="['/quiz', id]">Participer</button>
         </div>
     </div>
 </div>

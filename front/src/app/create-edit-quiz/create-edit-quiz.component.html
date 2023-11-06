@@ -49,9 +49,18 @@
             </div>
         </div>
         <button type="button" class="btn btn-outline-info mb-4 d-flex mx-auto justify-content-center align-items-center big-button" (click)="addQuestion()"><strong>+</strong></button>
-        <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" [disabled]="form.invalid" data-bs-toggle="modal" data-bs-target="#creationConfirmation">Créer le quiz</button>
+        <div *ngIf="isUpdateMode">
+            <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" [disabled]="form.invalid" data-bs-toggle="modal" data-bs-target="#editConfirmation">Modifier le quiz</button>
+
+        </div>
+        <div *ngIf="!isUpdateMode">
+            <button type="submit" class="btn btn-primary d-flex mx-auto fs-2" [disabled]="form.invalid" data-bs-toggle="modal" data-bs-target="#creationConfirmation">Créer le quiz</button>
+
+        </div>
     </form>
 </div>
+
+<!-- Pas réussi de mettre un *ngIf qui fonctionne -->
 
 <div class="modal fade" id="creationConfirmation" tabindex="-1" aria-labelledby="creationConfirmationLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -62,6 +71,23 @@
             </div>
             <div class="modal-body text-success text-center">
                 Création du quiz effectué avec succès.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editConfirmation" tabindex="-1" aria-labelledby="editConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editLabel">Confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-success text-center">
+                Modification du quiz effectué avec succès.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>

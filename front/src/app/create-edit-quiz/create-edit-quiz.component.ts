@@ -1,43 +1,67 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { Quiz } from '../types/quiz.type';
+import { Answer, Question, Quiz } from '../types/quiz.type';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from './custom-validators';
 import { QuizService } from '../services/quiz.service';
 import { BaseService } from '../services/base.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { merge, filter, mergeMap } from 'rxjs';
 
 @Component({
-  selector: 'app-create-quiz',
-  templateUrl: './create-quiz.component.html',
-  styleUrls: ['./create-quiz.component.css']
+  selector: 'app-create-edit-quiz',
+  templateUrl: './create-edit-quiz.component.html',
+  styleUrls: ['./create-edit-quiz.component.css']
 })
-export class CreateQuizComponent implements OnInit, OnChanges {
+export class CreateEditQuizComponent implements OnInit, OnChanges {
 
   private _isUpdateMode: boolean;
   private _quiz: Quiz;
-  //private readonly _cancel$: EventEmitter<void>;
-  //private readonly _submit$: EventEmitter<Quiz>;
-  private readonly _form: FormGroup;
+  private _quizId: string;
+  private _form: FormGroup;
 
-  constructor(private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
+  constructor(private _quizService: QuizService, private _activatedRoute: ActivatedRoute, private _baseService: BaseService, private _router: Router) {
     this._quiz = {} as Quiz;
     this._isUpdateMode = false;
-    //this._submit$ = new EventEmitter<Quiz>();
-    //this._cancel$ = new EventEmitter<void>();
+    this._quizId = "";
     this._form = this._buildForm();
+
+    this._router.events.subscribe((val) => {
+      if (val instanceof NavigationStart) {
+        //Lorsque l'url change, i.e passer d'un quiz à modifier à un quiz à créer dans notre cas
+        this._isUpdateMode = false;
+        this._form = this._buildForm();
+        this._quiz = {} as Quiz;
+      }
+    });
   }
 
   ngOnInit() {
     if (!this._baseService.isConnected()) {
       this._router.navigate(['/login']);
     }
-  }
-  /*
-    @Input()
-    set quiz(quiz: Quiz) {
-      this._quiz = quiz;
+
+    //Vérifie si on est en mode édition
+    const editableParam = this._activatedRoute.snapshot.queryParamMap.get('editable');
+    this._isUpdateMode = editableParam !== null ? true : false;
+
+    //Récupère l'id du quiz à modifier
+    const quizIdParam = this._activatedRoute.snapshot.queryParamMap.get('quizId');
+    this._quizId = quizIdParam !== null ? quizIdParam : '';
+
+    if (this._isUpdateMode) {
+      this._quizService.fetchOne(this._quizId).subscribe({
+        next: (quiz: Quiz) => {
+          this._quiz = quiz,
+            this._form = this._buildFormEditable()
+        },
+        error: () => {
+          // manage error when quiz doesn't exist in DB
+          this._quiz = this._quizService.defaultQuiz;
+        }
+      });
     }
-  */
+  }
+
   get quiz(): Quiz {
     return this._quiz;
   }
@@ -103,6 +127,21 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     (this._form.get('questions') as FormArray).updateValueAndValidity();
   }
 
+
+  /**
+   * FormGroup d'un quiz de base
+   */
+  private _buildForm(): FormGroup {
+    return new FormGroup({
+      title: new FormControl('', Validators.compose([
+        Validators.required, Validators.minLength(2)
+      ])),
+      questions: new FormArray([
+        this.newQuestion()
+      ], CustomValidators.arrayContainsAtLeast(1))
+    });
+  }
+
   /**
    * FormGroup d'une nouvelle question
    */
@@ -130,19 +169,28 @@ export class CreateQuizComponent implements OnInit, OnChanges {
     })
   }
 
-  /**
-   * FormGroup d'un quiz de base
-   */
-  private _buildForm(): FormGroup {
+  private _buildFormEditable(): FormGroup {
+    const form = new FormGroup({
+      title: new FormControl(this._quiz.title, Validators.compose([Validators.required, Validators.minLength(2)])),
+      questions: new FormArray(this._quiz.questions.map((question) => this.buildQuestionFormGroup(question)), [CustomValidators.arrayContainsAtLeast(1)])
+    });
+    return form;
+  }
+
+  private buildQuestionFormGroup(question: Question): FormGroup {
     return new FormGroup({
-      title: new FormControl('', Validators.compose([
-        Validators.required, Validators.minLength(2)
-      ])),
-      questions: new FormArray([
-        this.newQuestion()
-      ], CustomValidators.arrayContainsAtLeast(1))
+      textQuestion: new FormControl(question.textQuestion, Validators.compose([Validators.required, Validators.minLength(5)])),
+      answers: new FormArray(question.answers.map((answer) => this.buildAnswerFormGroup(answer)), [CustomValidators.arrayContainsAtLeast(2), CustomValidators.atLeastOneCheckboxChecked()])
     });
   }
+
+  private buildAnswerFormGroup(answer: Answer): FormGroup {
+    return new FormGroup({
+      textAnswer: new FormControl(answer.textAnswer, Validators.compose([Validators.required, Validators.minLength(1)])),
+      isCorrect: new FormControl(answer.isCorrect)
+    });
+  }
+
 
   ngOnChanges(record: any): void {
     if (record.quiz && record.quiz.currentValue) {
@@ -173,7 +221,18 @@ export class CreateQuizComponent implements OnInit, OnChanges {
   }
 
   onSubmit(): void {
-    this._quizService.create(this._form.value as Quiz);
-    this._form.reset();
+    if (this.isUpdateMode) {
+      this._quizService.change(this._form.value as Quiz, this._quizId);
+    } else {
+      this._quizService.create(this._form.value as Quiz);
+    }
+    this._form = this._buildForm();
+    this._router.navigate([], {
+      queryParams: {
+        'editable': null,
+        'quizId': null,
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 }

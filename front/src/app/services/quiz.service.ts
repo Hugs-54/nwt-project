@@ -9,6 +9,7 @@ import { BaseService } from './base.service';
   providedIn: 'root'
 })
 export class QuizService {
+
   // private property to store default person
   private _defaultQuiz: Quiz;
 
@@ -107,5 +108,13 @@ export class QuizService {
 
   submitQuiz(quiz: SubmitQuiz) {
     return this._http.post<string>(this._baseService.backenURL.submitQuiz, quiz, this._baseService.options(true))
+  }
+
+  change(quiz: Quiz, quizId: string) {
+    this._http.put<Quiz>(this._baseService.backenURL.oneQuiz.replace(':id', quizId), quiz, this._baseService.options(true))
+      .subscribe({
+        error: (e) => console.error(e),
+        complete: () => console.info('Quiz modifié avec succès')
+      });
   }
 }

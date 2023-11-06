@@ -15,8 +15,9 @@ export class QuizComponent {
   private _quiz: Quiz;
   private _form: FormGroup;
   private _score: string = "";
+  private _isSubmited: boolean = false;
 
-  constructor(private _route: ActivatedRoute, private _formBuilder: FormBuilder, private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
+  constructor(private _activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder, private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
     this._quiz = {} as Quiz;
     this._form = {} as FormGroup;
   }
@@ -25,9 +26,8 @@ export class QuizComponent {
     if (!this._baseService.isConnected()) {
       this._router.navigate(['/login']);
     }
-
     merge(
-      this._route.params.pipe(
+      this._activatedRoute.params.pipe(
         filter((params: any) => !!params.id),
         mergeMap((params: any) => this._quizService.fetchOne(params.id))
       )
@@ -96,11 +96,15 @@ export class QuizComponent {
     return this._score;
   }
 
+  get isSubmited() {
+    return this._isSubmited;
+  }
+
   sendForm() {
     this._quizService.submitQuiz(this._form.value as SubmitQuiz)
       .subscribe({
         error: (e) => console.error(e),
-        next: (response: any) => this._score = response,
+        next: (response: any) => { this._score = response, this._isSubmited = true; },
         complete: () => console.info('Résultat du quiz reçu.')
       });;
   }

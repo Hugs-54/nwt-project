@@ -11,7 +11,8 @@ export class ButtonAccessQuizComponent {
   private _title: string;
   private _quizId: string;
   private _isCreator: boolean;
-  private _score: string;
+  private _score: string; //score pour chaque quiz déjà répondu. Finalement pas utilisé par manque de compréhension
+  private _totalScore: string; //score total pour chaque quiz déjà répondu. Finalement pas utilisé par manque de compréhension
   private _hasAlreadyRespond: boolean = false;
   @Output() quizDeleted = new EventEmitter<{ quizId: string }>();
 
@@ -19,6 +20,7 @@ export class ButtonAccessQuizComponent {
     this._title = "";
     this._quizId = "";
     this._score = "";
+    this._totalScore = "";
     this._isCreator = false;
   }
 
@@ -27,9 +29,9 @@ export class ButtonAccessQuizComponent {
       this._quizService.fetchScore(this._quizId)
         .subscribe({
           next: (response: any) => {
-            this._score = response.score;
-            this._hasAlreadyRespond = response.score === null ? false : true;
-            console.log(response);
+            this._score = response.userScore;
+            this._totalScore = response.totalScore;
+            this._hasAlreadyRespond = response.userScore === null ? false : true;
           }
         });
     }
@@ -68,6 +70,10 @@ export class ButtonAccessQuizComponent {
 
   get score() {
     return this._score;
+  }
+
+  get totalScore() {
+    return this._totalScore;
   }
 
   deleteQuiz() {

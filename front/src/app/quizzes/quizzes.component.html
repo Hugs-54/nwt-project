@@ -1,12 +1,9 @@
-<div class="container" *ngFor="let quiz of quizzes; let i = index">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <app-button-access-quiz (quizDeleted)="deleteQuizArray($event)" [title]="quiz.title" [id]="quiz._id" [isCreator]="isCreator"></app-button-access-quiz>
-            </div>
-        </div>
-    </div>
+<div class="container width-group mb-3" *ngFor="let quiz of quizzes; let i = index">
+
+    <app-button-access-quiz (quizDeleted)="deleteQuizArray($event)" [title]="quiz.title" [id]="quiz._id" [isCreator]="isCreator"></app-button-access-quiz>
+
 </div>
+
 <div *ngIf="isCreator">
     <button type="button" class="btn btn-primary d-flex mx-auto fs-3 mt-4">
         <a [routerLink]="['/create-quiz']" class="nav-link" [routerLinkActive]="['active']">Créer un quiz</a>

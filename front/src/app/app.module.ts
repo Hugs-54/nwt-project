@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { QuizComponent } from './quiz/quiz.component';
 import { QuestionComponent } from './question/question.component';
-import { CreateQuizComponent } from './create-quiz/create-quiz.component';
+import { CreateEditQuizComponent } from './create-edit-quiz/create-edit-quiz.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRegisterComponent } from './login-register/login-register.component';
@@ -17,7 +17,7 @@ import { QuizzesComponent } from './quizzes/quizzes.component';
     AppComponent,
     QuizComponent,
     QuestionComponent,
-    CreateQuizComponent,
+    CreateEditQuizComponent,
     LoginRegisterComponent,
     ButtonAccessQuizComponent,
     QuizzesComponent,
