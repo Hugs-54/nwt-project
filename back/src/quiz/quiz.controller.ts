@@ -87,7 +87,7 @@ export class QuizController {
   }
 
   @Delete(':id')
-  @ApiNoContentResponse({ description: 'Le quiz a été supprimé avec succès.' })
+  @ApiOkResponse({ description: 'Le quiz a été supprimé avec succès.' })
   @ApiNotFoundResponse({ description: 'Aucun quiz trouvé pour cet ID.' })
   @ApiParam({ name: 'id', description: 'ID du quiz à supprimer.' })
   async delete(@Param('id') id: string): Promise<Quiz> {
@@ -95,6 +95,9 @@ export class QuizController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({
+    description: 'Le réponse au quiz a été enregistrer avec succès.',
+  })
   @Post('submit-quiz')
   async submitQuiz(
     @Request() req,
@@ -110,6 +113,10 @@ export class QuizController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({
+    description: "Le score de l'utilisation pour un quiz",
+  })
+  @ApiParam({ name: 'id', description: 'ID du quiz.' })
   @Get('/:quizId/score')
   async getUserQuizScore(
     @Request() req,
@@ -120,17 +127,26 @@ export class QuizController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({
+    description: 'Le classement pour un quiz',
+  })
+  @ApiParam({ name: 'id', description: 'ID du quiz.' })
   @Get('/:quizId/leaderboard')
   async getQuizLeaderboard(
-      @Param('quizId') quizId: string,
-  ): Promise<{ leaderboard: any[], totalScore: number }> {
+    @Param('quizId') quizId: string,
+  ): Promise<{ leaderboard: any[]; totalScore: number }> {
     return await this.quizService.getLeaderboard(quizId);
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({
+    description: 'Le détails des réponses données pour un quiz',
+  })
+  @ApiParam({ name: 'id', description: 'ID du quiz.' })
   @Get('/:quizId/details')
-  async getQuizDetailsWithResponses(@Param('quizId') quizId: string): Promise<any> {
+  async getQuizDetailsWithResponses(
+    @Param('quizId') quizId: string,
+  ): Promise<any> {
     return this.quizService.getQuizDetailsWithResponses(quizId);
   }
 }
-
