@@ -159,6 +159,9 @@ export class CreateEditQuizComponent implements OnInit, OnChanges {
     })
   }
 
+  /**
+   * FormGroup d'un quiz de base avec un quiz donné, destiné à la modification
+   */
   private _buildFormEditable(): FormGroup {
     const form = new FormGroup({
       title: new FormControl(this._quiz.title, Validators.compose([Validators.required, Validators.minLength(2)])),
@@ -167,6 +170,9 @@ export class CreateEditQuizComponent implements OnInit, OnChanges {
     return form;
   }
 
+  /**
+  * FormGroup d'une question de base avec un quiz donné, destiné à la modification
+  */
   private buildQuestionFormGroup(question: Question): FormGroup {
     return new FormGroup({
       textQuestion: new FormControl(question.textQuestion, Validators.compose([Validators.required, Validators.minLength(5)])),
@@ -174,6 +180,9 @@ export class CreateEditQuizComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * FormGroup d'une réponse de base avec un quiz donné, destiné à la modification
+   */
   private buildAnswerFormGroup(answer: Answer): FormGroup {
     return new FormGroup({
       textAnswer: new FormControl(answer.textAnswer, Validators.compose([Validators.required, Validators.minLength(1)])),

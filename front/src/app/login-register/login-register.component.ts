@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { LoginRegister, TokenResponse } from '../types/login-register.type';
+import { LoginRegister } from '../types/login-register.type';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginRegisterService } from '../services/login-register.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BaseService } from '../services/base.service';
 import { catchError, throwError } from 'rxjs';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-register',
@@ -20,7 +19,7 @@ export class LoginRegisterComponent {
   private _thereIsProblem: boolean = false;
   private _problemText: string = "";
 
-  constructor(private _loginRegisterService: LoginRegisterService, private _activatedRoute: ActivatedRoute, private _router: Router, private _baseService: BaseService) {
+  constructor(private _loginRegisterService: LoginRegisterService, private _router: Router, private _baseService: BaseService) {
     this._loginRegister = {} as LoginRegister;
     this._form = this._buildForm();
   }

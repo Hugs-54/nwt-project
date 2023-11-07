@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { merge, filter, mergeMap } from 'rxjs';
 import { BaseService } from '../services/base.service';
 import { QuizService } from '../services/quiz.service';
-import { Quiz } from '../types/quiz.type';
 
 @Component({
   selector: 'app-leaderboard',

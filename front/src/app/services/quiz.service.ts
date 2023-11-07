@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Quiz, SubmitQuiz } from '../types/quiz.type';
-import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable, defaultIfEmpty, filter, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, defaultIfEmpty, filter } from 'rxjs';
 import { BaseService } from './base.service';
 
 @Injectable({

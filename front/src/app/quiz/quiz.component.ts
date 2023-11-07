@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from '../services/quiz.service';
 import { filter, merge, mergeMap } from 'rxjs';
 import { BaseService } from '../services/base.service';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-quiz',
@@ -17,7 +17,7 @@ export class QuizComponent {
   private _score: string = "";
   private _isSubmited: boolean = false;
 
-  constructor(private _activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder, private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
+  constructor(private _activatedRoute: ActivatedRoute, private _quizService: QuizService, private _baseService: BaseService, private _router: Router) {
     this._quiz = {} as Quiz;
     this._form = {} as FormGroup;
   }
@@ -45,7 +45,9 @@ export class QuizComponent {
   }
 
 
-
+  /**
+   * Formulaire pour valider un quiz
+   */
   private _buildForm(): FormGroup {
     return new FormGroup({
       quizId: new FormControl(this._quiz._id, Validators.required),

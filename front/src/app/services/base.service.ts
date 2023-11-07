@@ -1,7 +1,6 @@
-import { HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { LoginRegister } from '../types/login-register.type';
 
 @Injectable({
   providedIn: 'root'

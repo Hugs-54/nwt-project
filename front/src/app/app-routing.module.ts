@@ -7,7 +7,7 @@ import { QuizzesComponent } from './quizzes/quizzes.component';
 import { ShowStatsComponent } from './show-stats/show-stats.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '', pathMatch: 'full' },
+  { path: '', redirectTo: 'authentication', pathMatch: 'full' },
   { path: 'authentication', component: LoginRegisterComponent },
   { path: 'quiz/:id', component: QuizComponent },
   { path: 'my-quizzes', component: QuizzesComponent },
