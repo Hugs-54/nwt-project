@@ -2,10 +2,10 @@
 Installer les prérequis : 
 ```
 cd front
-npm install
+yarn
 
 cd back
-npm install
+yarn
 ```
 
 Lancer l'application : 
