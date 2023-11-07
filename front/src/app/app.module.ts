@@ -11,6 +11,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { ButtonAccessQuizComponent } from './button-access-quiz/button-access-quiz.component';
 import { QuizzesComponent } from './quizzes/quizzes.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { DetailsComponent } from './details/details.component';
+import { ShowStatsComponent } from './show-stats/show-stats.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,9 @@ import { QuizzesComponent } from './quizzes/quizzes.component';
     LoginRegisterComponent,
     ButtonAccessQuizComponent,
     QuizzesComponent,
+    LeaderboardComponent,
+    DetailsComponent,
+    ShowStatsComponent,
   ],
   imports: [
     BrowserModule,

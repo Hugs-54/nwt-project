@@ -1,0 +1,19 @@
+<div class="container mx-auto justify-content-center align-items-center">
+    <div id="header">
+        <h1 class="text-center mb-3">Classement</h1>
+    </div>
+    <div id="leaderboard">
+        <div *ngIf="noOneRespond()">
+            <h2 class="text-center mb-3">Personne n'a encore répondu à ce quiz.</h2>
+        </div>
+        <table>
+            <tr *ngFor="let user of leaderboard; let i = index">
+                <td class="number">{{i+1}}</td>
+                <td class="name">{{user.user}}</td>
+                <td class="points">
+                    {{user.score}}/{{totalScore}} <img *ngIf="i == 0" class="gold-medal" src="../../assets/images/gold-medal.png" alt="gold medal" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

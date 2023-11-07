@@ -14,6 +14,8 @@ export const environment = {
             myQuiz: '/quiz/my-quiz',
             score: '/quiz/:quizId/score',
             submitQuiz: '/quiz/submit-quiz',
+            leaderboard: '/quiz/:quizId/leaderboard',
+            details: '/quiz/:quizId/details'
         },
     },
 };

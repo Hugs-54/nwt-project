@@ -1,7 +1,5 @@
 <div class="container width-group mb-3" *ngFor="let quiz of quizzes; let i = index">
-
     <app-button-access-quiz (quizDeleted)="deleteQuizArray($event)" [title]="quiz.title" [id]="quiz._id" [isCreator]="isCreator"></app-button-access-quiz>
-
 </div>
 
 <div *ngIf="isCreator">

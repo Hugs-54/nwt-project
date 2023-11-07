@@ -4,10 +4,10 @@
             <ul class="nav nav-pills">
                 <li class="nav-item">
                     <div *ngIf="isLogged()">
-                        <a [routerLink]="['/login']" class="nav-link" [routerLinkActive]="['active']" (click)="disconnect()">Se déconnecter</a>
+                        <a [routerLink]="['/authentication']" class="nav-link" [routerLinkActive]="['active']" (click)="disconnect()">Se déconnecter</a>
                     </div>
                     <div *ngIf="!isLogged()">
-                        <a [routerLink]="['/login']" class="nav-link" [routerLinkActive]="['active']">Se connecter</a>
+                        <a [routerLink]="['/authentication']" class="nav-link" [routerLinkActive]="['active']">Se connecter</a>
                     </div>
                 </li>
                 <li class="nav-item" *ngIf="isLogged()">

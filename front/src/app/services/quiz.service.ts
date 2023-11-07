@@ -117,4 +117,12 @@ export class QuizService {
         complete: () => console.info('Quiz modifié avec succès')
       });
   }
+
+  fetchLeaderboard(quizId: string) {
+    return this._http.get<any>(this._baseService.backenURL.leaderboard.replace(':quizId', quizId), this._baseService.options(true));
+  }
+
+  fetchDetails(quizId: string) {
+    return this._http.get<any>(this._baseService.backenURL.details.replace(':quizId', quizId), this._baseService.options(true));
+  }
 }

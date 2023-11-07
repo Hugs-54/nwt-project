@@ -4,8 +4,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from './custom-validators';
 import { QuizService } from '../services/quiz.service';
 import { BaseService } from '../services/base.service';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { merge, filter, mergeMap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-edit-quiz',
@@ -24,15 +23,6 @@ export class CreateEditQuizComponent implements OnInit, OnChanges {
     this._isUpdateMode = false;
     this._quizId = "";
     this._form = this._buildForm();
-
-    this._router.events.subscribe((val) => {
-      if (val instanceof NavigationStart) {
-        //Lorsque l'url change, i.e passer d'un quiz à modifier à un quiz à créer dans notre cas
-        this._isUpdateMode = false;
-        this._form = this._buildForm();
-        this._quiz = {} as Quiz;
-      }
-    });
   }
 
   ngOnInit() {
@@ -223,16 +213,10 @@ export class CreateEditQuizComponent implements OnInit, OnChanges {
   onSubmit(): void {
     if (this.isUpdateMode) {
       this._quizService.change(this._form.value as Quiz, this._quizId);
+      this._router.navigateByUrl("/my-quizzes");
     } else {
       this._quizService.create(this._form.value as Quiz);
     }
     this._form = this._buildForm();
-    this._router.navigate([], {
-      queryParams: {
-        'editable': null,
-        'quizId': null,
-      },
-      queryParamsHandling: 'merge'
-    })
   }
 }

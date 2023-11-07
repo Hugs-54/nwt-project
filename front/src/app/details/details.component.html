@@ -1,0 +1,29 @@
+<div class="quiz-container" id="quiz">
+    <h1 class="text-center">Détails des réponses</h1>
+    <div *ngFor="let question of questions; let i = index">
+        <div class="list-group box mb-4">
+            <div class="list-group-item width-group mx-auto text-center">
+                <h3 class="text-center mb-4 ">
+                    {{ question.questionText }}
+                </h3>
+                <div class="gap-2">
+                    <div class="d-grid col-8 mx-auto mb-2" *ngFor="let answer of question.answers; let j = index">
+                        <div *ngIf="answer.isCorrect" class="badge bg-success text-wrap fs-3">
+                            {{answer.answerText}}
+                        </div>
+
+                        <div *ngIf="!answer.isCorrect" class="badge bg-danger text-wrap fs-3">
+                            {{answer.answerText}}
+                        </div>
+                        <div class="box-user fs-5 mb-2 d-flex flex-wrap">
+                            <div *ngFor=" let user of answer.users; let k=index ">
+                                <div *ngIf="k!== answer.users.length-1; else elseBlock">{{user}},&nbsp;</div>
+                                <ng-template #elseBlock>{{user}}.</ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
