@@ -26,7 +26,8 @@ async function bootstrap() {
     .setTitle('Quiz API')
     .setDescription("La description de l'API de Quiz")
     .setVersion('1.0')
-    .addTag('quiz')
+    .addTag('quiz' )
+    .addTag('auth' )
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
